@@ -82,6 +82,9 @@ build/
 bin/
 gen/
 
+app/release
+app/debug
+
 # Local configuration file (sdk path, etc)
 local.properties
 

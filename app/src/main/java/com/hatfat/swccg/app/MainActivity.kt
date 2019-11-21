@@ -1,7 +1,8 @@
-package com.hatfat.swccg
+package com.hatfat.swccg.app
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import com.hatfat.swccg.R
 
 class MainActivity : AppCompatActivity() {
 

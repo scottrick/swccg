@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/masterCardListFragment">
+
+    <fragment
+        android:id="@+id/settingsFragment"
+        android:name="com.hatfat.swccg.fragments.SettingsFragment"
+        android:label="fragment_settings"
+        tools:layout="@layout/fragment_settings" />
+    <fragment
+        android:id="@+id/masterCardListFragment"
+        android:name="com.hatfat.swccg.fragments.MasterCardListFragment"
+        android:label="MasterCardListFragment" >
+        <action
+            android:id="@+id/action_masterCardListFragment_to_viewSingleCardFragment"
+            app:destination="@id/viewSingleCardFragment"
+            app:enterAnim="@anim/fragment_fade_enter"
+            app:exitAnim="@anim/fragment_fade_exit"
+            app:popEnterAnim="@anim/fragment_fade_enter"
+            app:popExitAnim="@anim/fragment_fade_exit" />
+    </fragment>
+    <fragment
+        android:id="@+id/viewSingleCardFragment"
+        android:name="com.hatfat.swccg.fragments.SingleCardFragment"
+        android:label="ViewSingleCardFragment" >
+        <argument
+            android:name="card"
+            app:argType="com.hatfat.swccg.data.SWCCGCard" />
+    </fragment>
+</navigation>

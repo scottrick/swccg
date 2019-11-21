@@ -1,6 +1,6 @@
 package com.hatfat.swccg.data
 
-data class Set(
+data class SWCCGSet(
     val code: String,
     val cycle_code: String,
     val date_release: String,

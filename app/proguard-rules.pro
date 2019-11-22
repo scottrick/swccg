@@ -20,5 +20,6 @@
 # hide the original source file name.
 #-renamesourcefileattribute SourceFile
 
--keep public class * extends com.bumptech.glide.module.AppGlideModule
--keep class com.bumptech.glide.GeneratedAppGlideModuleImpl
+-verbose
+-dontoptimize
+-dontobfuscate

@@ -62,7 +62,7 @@ class MasterCardListFragment : Fragment() {
         }
 
         viewModel.cards.observe(viewLifecycleOwner, Observer {
-            cardListAdapter.cardList = ArrayList(it.values)
+            cardListAdapter.cardList = ArrayList(it.toList())
         })
 
         return view

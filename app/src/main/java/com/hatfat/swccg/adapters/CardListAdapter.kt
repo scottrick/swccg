@@ -27,11 +27,13 @@ class CardListAdapter(
         val view: View
     ) : RecyclerView.ViewHolder(view) {
 
-        val textView: TextView = view.findViewById(R.id.card_name)
+        val nameTextView: TextView = view.findViewById(R.id.card_name)
+        val typeTextView: TextView = view.findViewById(R.id.card_type)
         val imageView: ImageView = view.findViewById(R.id.card_imageview)
 
         fun bind(card: SWCCGCard) {
-            textView.text = card.name
+            nameTextView.text = card.name
+            typeTextView.text = card.type_code
 
             /* clear old image view */
             imageView.setImageResource(0)

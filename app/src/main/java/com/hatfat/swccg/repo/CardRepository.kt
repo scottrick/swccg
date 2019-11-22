@@ -23,13 +23,17 @@ class CardRepository @Inject constructor(
     private val gson: Gson,
     setRepository: SetRepository
 ) {
-    private val cardLiveData = MutableLiveData<Map<String, SWCCGCard>>()
+    private val cardHashMapLiveData = MutableLiveData<Map<String, SWCCGCard>>()
+    private val cardArrayListLiveData = MutableLiveData<Array<SWCCGCard>>()
 
-    val cards: LiveData<Map<String, SWCCGCard>>
-        get() = cardLiveData
+    val cardsMap: LiveData<Map<String, SWCCGCard>>
+        get() = cardHashMapLiveData
+
+    val cardsArray: LiveData<Array<SWCCGCard>>
+        get() = cardArrayListLiveData
 
     init {
-        cardLiveData.value = HashMap()
+        cardHashMapLiveData.value = HashMap()
 
         setRepository.sets.observeForever {
             it?.let {
@@ -60,8 +64,12 @@ class CardRepository @Inject constructor(
             }
         }
 
+        val array = hashMap.values.toTypedArray()
+        array.sort()
+
         withContext(Dispatchers.Main) {
-            cardLiveData.value = hashMap
+            cardHashMapLiveData.value = hashMap
+            cardArrayListLiveData.value = array
         }
     }
 }

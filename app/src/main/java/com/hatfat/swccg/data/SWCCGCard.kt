@@ -37,7 +37,7 @@ data class SWCCGCard(
     var type_code: String,
     var uniqueness: String,
     var warrior: Boolean
-) : Serializable {
+) : Serializable, Comparable<SWCCGCard> {
 
     val imageUrlLarge: String
         get() = IMAGE_URL_PREFIX + image_url
@@ -48,6 +48,10 @@ data class SWCCGCard(
     companion object {
         val IMAGE_URL_PREFIX =
             "https://www.starwarsccg.org/wp/wp-content/plugins/card-search/cards/starwars/"
+    }
+
+    override fun compareTo(other: SWCCGCard): Int {
+        return name.compareTo(other.name)
     }
 }
 

@@ -24,7 +24,7 @@ class MasterCardListViewModel @Inject constructor(
         navigateToSingleCardLiveData.value = card
     }
 
-    val cards: LiveData<Map<String, SWCCGCard>>
-        get() = cardRepository.cards
+    val cards: LiveData<Array<SWCCGCard>>
+        get() = cardRepository.cardsArray
 
 }

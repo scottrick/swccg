@@ -1,4 +1,14 @@
 <resources>
-    <string name="app_name">SWCCG Assistant</string>
+    <string name="app_name">R2-X2</string>
+
+    <string name="search_string_label">Search Text</string>
+    <string name="search_string_hint">Enter Search Text, I.e. \"R2-X2\"</string>
+    <string name="search_title_label">Title</string>
+    <string name="search_lore_label">Lore</string>
+    <string name="search_gametext_label">Gametext</string>
+    <string name="search_side_label">Side</string>
+    <string name="search_set_label">Set</string>
+    <string name="search_button_text">Search</string>
+    <string name="search_no_results_toast">No results matching the given search parameters.</string>
 
 </resources>

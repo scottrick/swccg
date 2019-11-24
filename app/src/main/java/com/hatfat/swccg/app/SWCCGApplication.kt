@@ -1,11 +1,13 @@
 package com.hatfat.swccg.app
 
 import android.app.Application
-import com.hatfat.swccg.fragments.MasterCardListFragment
-import com.hatfat.swccg.fragments.SettingsFragment
-import com.hatfat.swccg.fragments.SingleCardFragment
+import com.hatfat.swccg.fragments.*
+import com.hatfat.swccg.repo.CardRepository
+import com.hatfat.swccg.repo.MetaDataRepository
+import com.hatfat.swccg.repo.SetRepository
 import dagger.BindsInstance
 import dagger.Component
+import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
@@ -16,7 +18,9 @@ import javax.inject.Singleton
 )
 interface ApplicationComponent {
     fun inject(app: SWCCGApplication)
+    fun inject(fragment: CardListFragment)
     fun inject(fragment: MasterCardListFragment)
+    fun inject(fragment: SearchFragment)
     fun inject(fragment: SettingsFragment)
     fun inject(fragment: SingleCardFragment)
 
@@ -30,6 +34,16 @@ interface ApplicationComponent {
 }
 
 class SWCCGApplication : Application() {
+
+    /* Inject repositories here so they begin loading immediately on app startup */
+    @Inject
+    lateinit var metaDataRepository: MetaDataRepository
+
+    @Inject
+    lateinit var cardRepository: CardRepository
+
+    @Inject
+    lateinit var setRepository: SetRepository
 
     override fun onCreate() {
         super.onCreate()

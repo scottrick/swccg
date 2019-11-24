@@ -4,13 +4,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_graph"
-    app:startDestination="@id/masterCardListFragment">
+    app:startDestination="@id/searchFragment">
 
-    <fragment
-        android:id="@+id/settingsFragment"
-        android:name="com.hatfat.swccg.fragments.SettingsFragment"
-        android:label="fragment_settings"
-        tools:layout="@layout/fragment_settings" />
     <fragment
         android:id="@+id/masterCardListFragment"
         android:name="com.hatfat.swccg.fragments.MasterCardListFragment"
@@ -30,5 +25,24 @@
         <argument
             android:name="card"
             app:argType="com.hatfat.swccg.data.SWCCGCard" />
+    </fragment>
+    <fragment
+        android:id="@+id/searchFragment"
+        android:name="com.hatfat.swccg.fragments.SearchFragment"
+        android:label="SearchFragment" >
+        <action
+            android:id="@+id/action_searchFragment_to_cardListFragment"
+            app:destination="@id/cardListFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/cardListFragment"
+        android:name="com.hatfat.swccg.fragments.CardListFragment"
+        android:label="CardListFragment" >
+        <argument
+            android:name="cards"
+            app:argType="com.hatfat.swccg.data.SWCCGCardList" />
+        <action
+            android:id="@+id/action_cardListFragment_to_viewSingleCardFragment"
+            app:destination="@id/viewSingleCardFragment" />
     </fragment>
 </navigation>

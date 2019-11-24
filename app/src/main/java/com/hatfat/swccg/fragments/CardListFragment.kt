@@ -9,6 +9,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
+import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.hatfat.swccg.R
@@ -17,11 +18,11 @@ import com.hatfat.swccg.app.InjectionGraph
 import com.hatfat.swccg.app.SWCCGApplication
 import com.hatfat.swccg.data.SWCCGCard
 import com.hatfat.swccg.repo.MetaDataRepository
-import com.hatfat.swccg.viewmodels.MasterCardListViewModel
+import com.hatfat.swccg.viewmodels.CardListViewModel
 import com.hatfat.swccg.viewmodels.SWCCGViewModelFactory
 import javax.inject.Inject
 
-class MasterCardListFragment : Fragment() {
+class CardListFragment : Fragment() {
 
     @Inject
     lateinit var swccgApplication: SWCCGApplication
@@ -32,19 +33,22 @@ class MasterCardListFragment : Fragment() {
     @Inject
     lateinit var metaDataRepository: MetaDataRepository
 
-    private lateinit var viewModel: MasterCardListViewModel
+    private lateinit var viewModel: CardListViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        viewModel = ViewModelProvider(this)[CardListViewModel::class.java]
+
+        val args = navArgs<CardListFragmentArgs>().value
+        viewModel.setCardList(args.cards.cards)
+
         viewModel =
-            ViewModelProvider(this, swccgViewModelFactory)[MasterCardListViewModel::class.java]
+            ViewModelProvider(this, swccgViewModelFactory)[CardListViewModel::class.java]
         viewModel.navigateToSingleCard.observe(this, Observer {
             it?.let {
                 findNavController().navigate(
-                    MasterCardListFragmentDirections.actionMasterCardListFragmentToViewSingleCardFragment(
-                        it
-                    )
+                    CardListFragmentDirections.actionCardListFragmentToViewSingleCardFragment(it)
                 )
                 viewModel.doneNavigating()
             }
@@ -71,7 +75,7 @@ class MasterCardListFragment : Fragment() {
             this.adapter = cardListAdapter
         }
 
-        viewModel.cards.observe(viewLifecycleOwner, Observer {
+        viewModel.cardList.observe(viewLifecycleOwner, Observer {
             cardListAdapter.cardList = ArrayList(it.toList())
         })
 

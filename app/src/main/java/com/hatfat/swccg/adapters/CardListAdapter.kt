@@ -10,10 +10,12 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.hatfat.swccg.R
 import com.hatfat.swccg.data.SWCCGCard
+import com.hatfat.swccg.data.SWCCGCardType
 import java.util.*
 
 class CardListAdapter(
     val context: Context,
+    val types: Map<String, SWCCGCardType>,
     val cardSelectedInterface: CardSelectedInterface
 ) : RecyclerView.Adapter<CardListAdapter.ViewHolder>() {
 
@@ -33,12 +35,12 @@ class CardListAdapter(
 
         fun bind(card: SWCCGCard) {
             nameTextView.text = card.name
-            typeTextView.text = card.type_code
+            typeTextView.text = types[card.type_code]?.name ?: card.type_code
 
             /* clear old image view */
             imageView.setImageResource(0)
 
-                Glide.with(context).load(card.imageUrlSmall).into(imageView)
+            Glide.with(context).load(card.imageUrlSmall).into(imageView)
 
             view.setOnClickListener {
                 cardSelectedInterface.onCardSelected(card)

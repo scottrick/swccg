@@ -61,7 +61,7 @@ class CardListFragment : Fragment() {
     ): View? {
         val view = inflater.inflate(R.layout.fragment_card_list, container, false)
 
-        val types = metaDataRepository.types.value ?: HashMap()
+        val types = metaDataRepository.cardTypes.value ?: HashMap()
 
         val cardListAdapter =
             CardListAdapter(swccgApplication, types, object : CardListAdapter.CardSelectedInterface {

@@ -6,6 +6,7 @@ import androidx.lifecycle.MutableLiveData
 import com.google.gson.Gson
 import com.hatfat.swccg.R
 import com.hatfat.swccg.data.SWCCGCardType
+import com.hatfat.swccg.data.SWCCGSide
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
@@ -20,14 +21,20 @@ class MetaDataRepository @Inject constructor(
     private val resources: Resources,
     private val gson: Gson
 ) {
-    /* maps code -> SWCCGCardType */
-    private val typesLiveData = MutableLiveData<Map<String, SWCCGCardType>>()
+    /* code -> SWCCGCardType */
+    private val cardTypesLiveData = MutableLiveData<Map<String, SWCCGCardType>>()
+    /* code -> SWCCGSide */
+    private val sidesLiveData = MutableLiveData<Map<String, SWCCGSide>>()
 
-    val types: LiveData<Map<String, SWCCGCardType>>
-        get() = typesLiveData
+    val cardTypes: LiveData<Map<String, SWCCGCardType>>
+        get() = cardTypesLiveData
+
+    val sides: LiveData<Map<String, SWCCGSide>>
+        get() = sidesLiveData
 
     init {
-        typesLiveData.value = HashMap()
+        cardTypesLiveData.value = HashMap()
+        sidesLiveData.value = HashMap()
 
         GlobalScope.launch(Dispatchers.IO) {
             load()
@@ -35,18 +42,28 @@ class MetaDataRepository @Inject constructor(
     }
 
     private suspend fun load() {
-        val inputStream = resources.openRawResource(R.raw.types)
-        val reader = BufferedReader(InputStreamReader(inputStream))
+        val typesInputStream = resources.openRawResource(R.raw.types)
+        val sidesInputStream = resources.openRawResource(R.raw.sides)
+        val typesReader = BufferedReader(InputStreamReader(typesInputStream))
+        val sidesReader = BufferedReader(InputStreamReader(sidesInputStream))
 
-        val types = gson.fromJson(reader, Array<SWCCGCardType>::class.java)
+        val types = gson.fromJson(typesReader, Array<SWCCGCardType>::class.java)
+        val sides = gson.fromJson(sidesReader, Array<SWCCGSide>::class.java)
 
-        val hashMap = HashMap<String, SWCCGCardType>()
+        val typesHashMap = HashMap<String, SWCCGCardType>()
+        val sidesHashMap = HashMap<String, SWCCGSide>()
+
         for (type in types) {
-            hashMap.put(type.code, type)
+            typesHashMap.put(type.code, type)
+        }
+
+        for (side in sides) {
+            sidesHashMap.put(side.code, side)
         }
 
         withContext(Dispatchers.Main) {
-            typesLiveData.value = hashMap
+            cardTypesLiveData.value = typesHashMap
+            sidesLiveData.value = sidesHashMap
         }
     }
 }

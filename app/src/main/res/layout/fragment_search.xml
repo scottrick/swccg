@@ -28,7 +28,6 @@
             android:padding="@dimen/default_padding">
 
             <androidx.appcompat.widget.AppCompatTextView
-                android:id="@+id/search_label"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:paddingTop="@dimen/default_padding"
@@ -92,6 +91,52 @@
                         android:textColor="@color/textDarkPrimary" />
 
                 </LinearLayout>
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingTop="@dimen/default_padding_2x"
+                android:paddingBottom="@dimen/default_padding"
+                android:text="@string/search_options_label"
+                android:textColor="@color/textDarkPrimary"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/bordered_background"
+                android:padding="@dimen/default_padding">
+
+                <androidx.appcompat.widget.AppCompatSpinner
+                    android:id="@+id/side_spinner"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintEnd_toStartOf="@id/card_type_spinner"
+                    android:layout_marginEnd="@dimen/default_padding"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content" />
+
+                <androidx.appcompat.widget.AppCompatSpinner
+                    android:id="@+id/card_type_spinner"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintStart_toEndOf="@id/side_spinner"
+                    android:layout_marginStart="@dimen/default_padding"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content" />
+
+                <androidx.appcompat.widget.AppCompatSpinner
+                    android:id="@+id/set_spinner"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/card_type_spinner"
+                    android:layout_marginTop="@dimen/default_padding"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content" />
+
             </androidx.constraintlayout.widget.ConstraintLayout>
 
             <Space

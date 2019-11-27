@@ -1,15 +1,11 @@
 package com.hatfat.swccg.viewmodels
 
 import android.content.res.Resources
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.Transformations
-import androidx.lifecycle.ViewModel
+import android.util.Log
+import androidx.lifecycle.*
+import androidx.lifecycle.Observer
 import com.hatfat.swccg.R
-import com.hatfat.swccg.data.SWCCGCard
-import com.hatfat.swccg.data.SWCCGCardType
-import com.hatfat.swccg.data.SWCCGSet
-import com.hatfat.swccg.data.SWCCGSide
+import com.hatfat.swccg.data.*
 import com.hatfat.swccg.filter.*
 import com.hatfat.swccg.repo.CardRepository
 import com.hatfat.swccg.repo.MetaDataRepository
@@ -35,17 +31,30 @@ class SearchViewModel @Inject constructor(
 
     private val anySet = SWCCGSet("", name = resources.getString(R.string.search_any_set))
     private val anySide = SWCCGSide("", resources.getString(R.string.search_any_side))
-    private val anyCardType = SWCCGCardType("", resources.getString(R.string.search_any_cardtype))
+    private val anyCardType = SWCCGCardType("", resources.getString(R.string.search_any_card_type))
+    private val anyCardSubType =
+        SWCCGCardSubType("", resources.getString(R.string.search_any_card_subtype))
 
     private val searchStringLiveData = MutableLiveData<String>()
     private val searchTitleLiveData = MutableLiveData<Boolean>()
     private val searchGametextLiveData = MutableLiveData<Boolean>()
     private val searchLoreLiveData = MutableLiveData<Boolean>()
+    private val searchTextEnabledLiveData = MediatorLiveData<Boolean>().apply {
+        val observer = Observer<Boolean>() {
+            this.value =
+                searchTitleLiveData.value ?: false || searchGametextLiveData.value ?: false || searchLoreLiveData.value ?: false
+        }
+
+        this.addSource(searchTitleLiveData, observer)
+        this.addSource(searchGametextLiveData, observer)
+        this.addSource(searchLoreLiveData, observer)
+    }
     private val stateLiveData = MutableLiveData<State>()
     private val searchResultsLiveData = MutableLiveData<List<SWCCGCard>>()
     private val selectedSetLiveData = MutableLiveData<SWCCGSet>()
     private val selectedSideLiveData = MutableLiveData<SWCCGSide>()
     private val selectedCardTypeLiveData = MutableLiveData<SWCCGCardType>()
+    private val selectedCardSubTypeLiveData = MutableLiveData<SWCCGCardSubType>()
 
     val searchString: LiveData<String>
         get() = searchStringLiveData
@@ -55,6 +64,9 @@ class SearchViewModel @Inject constructor(
 
     val searchGametext: LiveData<Boolean>
         get() = searchGametextLiveData
+
+    val searchTextEnabled: LiveData<Boolean>
+        get() = searchTextEnabledLiveData
 
     val searchLore: LiveData<Boolean>
         get() = searchLoreLiveData
@@ -87,6 +99,14 @@ class SearchViewModel @Inject constructor(
             cardTypes
         }
 
+    val cardSubTypes: LiveData<List<SWCCGCardSubType>> =
+        Transformations.map(metaDataRepository.cardSubTypes) {
+            val cardSubTypes = it.values.toMutableList()
+            cardSubTypes.sort()
+            cardSubTypes.add(0, anyCardSubType)
+            cardSubTypes
+        }
+
     val selectedSet: LiveData<SWCCGSet>
         get() = selectedSetLiveData
 
@@ -96,13 +116,27 @@ class SearchViewModel @Inject constructor(
     val selectedCardType: LiveData<SWCCGCardType>
         get() = selectedCardTypeLiveData
 
+    val selectedCardSubType: LiveData<SWCCGCardSubType>
+        get() = selectedCardSubTypeLiveData
+
     init {
+        stateLiveData.value = State.ENTERING_INFO
+        reset()
+    }
+
+    private fun reset() {
         searchStringLiveData.value = ""
         searchTitleLiveData.value = true
         searchGametextLiveData.value = false
         searchLoreLiveData.value = false
-        stateLiveData.value = State.ENTERING_INFO
+        selectedSetLiveData.value = anySet
         selectedSideLiveData.value = anySide
+        selectedCardTypeLiveData.value = anyCardType
+        selectedCardSubTypeLiveData.value = anyCardSubType
+    }
+
+    fun resetPressed() {
+        reset()
     }
 
     fun titleToggled(newValue: Boolean) {
@@ -129,6 +163,10 @@ class SearchViewModel @Inject constructor(
         selectedCardTypeLiveData.value = newValue
     }
 
+    fun setSelectedCardSubType(newValue: SWCCGCardSubType) {
+        selectedCardSubTypeLiveData.value = newValue
+    }
+
     fun searchPressed(searchString: String) {
         searchStringLiveData.value = searchString
 
@@ -146,12 +184,14 @@ class SearchViewModel @Inject constructor(
         val filters = LinkedList<Filter>()
 
         searchStringLiveData.value?.let {
-            if (it.isNotEmpty()) {
+            val title = searchTitle.value ?: false
+            val gametext = searchGametext.value ?: false
+            val lore = searchLore.value ?: false
+
+            if (it.isNotEmpty() && (title || gametext || lore)) {
+                /* only add string filter if we have a search string, and one of the boxes is checked */
                 val stringFilter = StringFilter(
-                    it,
-                    searchTitle.value ?: false,
-                    searchGametext.value ?: false,
-                    searchLore.value ?: false
+                    it, title, gametext, lore
                 )
 
                 filters.add(stringFilter)
@@ -173,6 +213,12 @@ class SearchViewModel @Inject constructor(
         selectedCardType.value?.let {
             if (!it.equals(anyCardType)) {
                 filters.add(CardTypeFilter(it))
+            }
+        }
+
+        selectedCardSubType.value?.let {
+            if (!it.equals(anyCardSubType)) {
+                filters.add(CardSubTypeFilter(it))
             }
         }
 

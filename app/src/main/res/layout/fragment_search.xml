@@ -3,7 +3,6 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/colorAccentLight"
     android:fillViewport="true">
 
     <ProgressBar
@@ -52,6 +51,7 @@
                     android:maxLines="1"
                     android:lines="1"
                     android:inputType="text"
+                    android:imeOptions="actionSearch"
                     android:textColor="@color/textDarkPrimary"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
@@ -111,33 +111,57 @@
                 android:padding="@dimen/default_padding">
 
                 <androidx.appcompat.widget.AppCompatSpinner
-                    android:id="@+id/side_spinner"
+                    android:id="@+id/set_spinner"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintEnd_toStartOf="@id/card_type_spinner"
+                    app:layout_constraintEnd_toStartOf="@id/type_spinner"
                     android:layout_marginEnd="@dimen/default_padding"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content" />
 
                 <androidx.appcompat.widget.AppCompatSpinner
-                    android:id="@+id/card_type_spinner"
+                    android:id="@+id/type_spinner"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintStart_toEndOf="@id/side_spinner"
+                    app:layout_constraintStart_toEndOf="@id/set_spinner"
                     android:layout_marginStart="@dimen/default_padding"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content" />
 
                 <androidx.appcompat.widget.AppCompatSpinner
-                    android:id="@+id/set_spinner"
+                    android:id="@+id/side_spinner"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/card_type_spinner"
+                    app:layout_constraintEnd_toStartOf="@id/subtype_spinner"
+                    app:layout_constraintTop_toBottomOf="@id/type_spinner"
                     android:layout_marginTop="@dimen/default_padding"
+                    android:layout_marginEnd="@dimen/default_padding"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content" />
+
+                <androidx.appcompat.widget.AppCompatSpinner
+                    android:id="@+id/subtype_spinner"
+                    app:layout_constraintStart_toEndOf="@id/side_spinner"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/type_spinner"
+                    android:layout_marginTop="@dimen/default_padding"
+                    android:layout_marginStart="@dimen/default_padding"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/reset_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/default_padding"
+                android:layout_marginBottom="@dimen/default_padding"
+                android:paddingStart="20dp"
+                android:paddingEnd="20dp"
+                android:backgroundTint="@color/textDarkSecondary"
+                android:layout_gravity="end"
+                android:text="@string/reset_button_text"
+                android:textColor="@color/textLightSecondary" />
 
             <Space
                 android:layout_width="0dp"
@@ -154,115 +178,6 @@
                 android:textColor="@color/textLightSecondary" />
 
         </LinearLayout>
-
-        <!--    <androidx.constraintlayout.widget.ConstraintLayout-->
-        <!--        android:layout_width="match_parent"-->
-        <!--        android:layout_height="wrap_content"-->
-        <!--        android:padding="@dimen/default_padding">-->
-
-        <!--        <androidx.appcompat.widget.AppCompatTextView-->
-        <!--            android:id="@+id/search_label"-->
-        <!--            android:layout_width="0dp"-->
-        <!--            android:layout_height="wrap_content"-->
-        <!--            android:text="@string/search_string_label"-->
-        <!--            android:textColor="@color/textDarkPrimary"-->
-        <!--            app:layout_constraintEnd_toEndOf="parent"-->
-        <!--            app:layout_constraintStart_toStartOf="parent"-->
-        <!--            app:layout_constraintTop_toTopOf="parent" />-->
-
-        <!--        <androidx.appcompat.widget.AppCompatEditText-->
-        <!--            android:id="@+id/search_edittext"-->
-        <!--            android:layout_width="0dp"-->
-        <!--            android:layout_height="wrap_content"-->
-        <!--            android:textColor="@color/textDarkPrimary"-->
-        <!--            app:layout_constraintEnd_toEndOf="parent"-->
-        <!--            app:layout_constraintStart_toStartOf="parent"-->
-        <!--            app:layout_constraintTop_toBottomOf="@id/search_label" />-->
-
-        <!--        <LinearLayout-->
-        <!--            android:id="@+id/search_container"-->
-        <!--            android:layout_width="0dp"-->
-        <!--            android:layout_height="wrap_content"-->
-        <!--            android:orientation="horizontal"-->
-        <!--            android:paddingBottom="20dp"-->
-        <!--            app:layout_constraintEnd_toEndOf="parent"-->
-        <!--            app:layout_constraintStart_toStartOf="parent"-->
-        <!--            app:layout_constraintTop_toBottomOf="@id/search_edittext">-->
-
-        <!--            <CheckBox-->
-        <!--                android:layout_width="match_parent"-->
-        <!--                android:layout_height="wrap_content"-->
-        <!--                android:layout_weight="1"-->
-        <!--                android:text="@string/search_title_label"-->
-        <!--                android:textColor="@color/textDarkPrimary" />-->
-
-        <!--            <CheckBox-->
-        <!--                android:layout_width="match_parent"-->
-        <!--                android:layout_height="wrap_content"-->
-        <!--                android:layout_weight="1"-->
-        <!--                android:text="@string/search_gametext_label"-->
-        <!--                android:textColor="@color/textDarkPrimary" />-->
-
-        <!--            <CheckBox-->
-        <!--                android:layout_width="match_parent"-->
-        <!--                android:layout_height="wrap_content"-->
-        <!--                android:layout_weight="1"-->
-        <!--                android:text="@string/search_lore_label"-->
-        <!--                android:textColor="@color/textDarkPrimary" />-->
-
-        <!--        </LinearLayout>-->
-
-        <!--        <androidx.appcompat.widget.AppCompatTextView-->
-        <!--            android:id="@+id/side_spinner_label"-->
-        <!--            android:layout_width="0dp"-->
-        <!--            android:layout_height="wrap_content"-->
-        <!--            android:text="@string/search_side_label"-->
-        <!--            android:textColor="@color/textDarkPrimary"-->
-        <!--            app:layout_constraintEnd_toStartOf="@id/set_spinner"-->
-        <!--            app:layout_constraintStart_toStartOf="parent"-->
-        <!--            app:layout_constraintTop_toBottomOf="@id/search_container" />-->
-
-        <!--        <androidx.appcompat.widget.AppCompatTextView-->
-        <!--            android:id="@+id/set_spinner_label"-->
-        <!--            android:layout_width="0dp"-->
-        <!--            android:layout_height="wrap_content"-->
-        <!--            android:text="@string/search_set_label"-->
-        <!--            android:textColor="@color/textDarkPrimary"-->
-        <!--            app:layout_constraintEnd_toEndOf="parent"-->
-        <!--            app:layout_constraintStart_toEndOf="@id/side_spinner"-->
-        <!--            app:layout_constraintTop_toBottomOf="@id/search_container" />-->
-
-        <!--        <androidx.appcompat.widget.AppCompatSpinner-->
-        <!--            android:id="@+id/side_spinner"-->
-        <!--            android:layout_width="0dp"-->
-        <!--            android:layout_height="20dp"-->
-        <!--            android:layout_marginEnd="@dimen/default_padding"-->
-        <!--            app:layout_constraintEnd_toStartOf="@id/set_spinner"-->
-        <!--            app:layout_constraintStart_toStartOf="parent"-->
-        <!--            app:layout_constraintTop_toBottomOf="@id/side_spinner_label" />-->
-
-        <!--        <androidx.appcompat.widget.AppCompatSpinner-->
-        <!--            android:id="@+id/set_spinner"-->
-        <!--            android:layout_width="0dp"-->
-        <!--            android:layout_height="20dp"-->
-        <!--            android:layout_marginStart="@dimen/default_padding"-->
-        <!--            app:layout_constraintEnd_toEndOf="parent"-->
-        <!--            app:layout_constraintStart_toEndOf="@id/side_spinner"-->
-        <!--            app:layout_constraintTop_toBottomOf="@id/set_spinner_label" />-->
-
-        <!--        <androidx.appcompat.widget.AppCompatButton-->
-        <!--            android:id="@+id/search_button"-->
-        <!--            android:layout_width="0dp"-->
-        <!--            android:layout_height="wrap_content"-->
-        <!--            android:background="@color/textDarkSecondary"-->
-        <!--            android:text="@string/search_button_text"-->
-        <!--            android:textColor="@color/textLightSecondary"-->
-        <!--            app:layout_constraintBottom_toBottomOf="parent"-->
-        <!--            app:layout_constraintEnd_toEndOf="parent"-->
-        <!--            app:layout_constraintStart_toStartOf="parent" />-->
-
-        <!--    </androidx.constraintlayout.widget.ConstraintLayout>-->
-
     </ScrollView>
 </FrameLayout>
 

@@ -5,6 +5,15 @@
     android:layout_height="wrap_content"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
+    <View
+        android:layout_width="0dp"
+        android:layout_height="1dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:background="@color/colorAccent"
+        />
+
     <ImageView
         android:id="@+id/card_imageview"
         app:layout_constraintStart_toStartOf="parent"
@@ -17,6 +26,21 @@
         tools:src="@drawable/ic_launcher_background"
         />
 
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/card_rarity"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_gravity="center_vertical"
+        android:paddingStart="0dp"
+        android:paddingEnd="@dimen/default_padding"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@color/textDarkSecondary"
+        android:textSize="12sp"
+        tools:text="R1"
+        />
+
     <LinearLayout
         app:layout_constraintStart_toEndOf="@id/card_imageview"
         app:layout_constraintEnd_toEndOf="parent"
@@ -27,7 +51,7 @@
         android:layout_height="wrap_content"
         android:orientation="vertical">
 
-        <TextView
+        <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/card_name"
             app:layout_constraintStart_toEndOf="@id/card_imageview"
             app:layout_constraintEnd_toEndOf="parent"
@@ -37,12 +61,12 @@
             android:paddingEnd="@dimen/default_padding"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textColor="#ff111111"
+            android:textColor="@color/textDarkPrimary"
             android:textSize="14sp"
             tools:text="Chewbacca"
             />
 
-        <TextView
+        <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/card_type"
             app:layout_constraintStart_toEndOf="@id/card_imageview"
             app:layout_constraintEnd_toEndOf="parent"
@@ -52,7 +76,7 @@
             android:paddingEnd="@dimen/default_padding"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textColor="#ff222222"
+            android:textColor="@color/textDarkSecondary"
             android:textSize="12sp"
             tools:text="Character"
             />

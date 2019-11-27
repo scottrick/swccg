@@ -5,15 +5,16 @@ apply plugin: 'kotlin-kapt'
 apply plugin: "androidx.navigation.safeargs.kotlin"
 
 android {
-    compileSdkVersion 28
+    compileSdkVersion 29
     defaultConfig {
         applicationId "com.hatfat.swccg"
         minSdkVersion 25
-        targetSdkVersion 28
-        versionCode 6
-        versionName "0.06"
+        targetSdkVersion 29
+        versionCode 7
+        versionName "0.07"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
+
     buildTypes {
         debug {
             debuggable true

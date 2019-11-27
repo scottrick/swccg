@@ -60,7 +60,9 @@ class CardRepository @Inject constructor(
             val cards = gson.fromJson(reader, Array<SWCCGCard>::class.java)
 
             for (card in cards) {
-                hashMap.put(card.code, card)
+                card.code?.let {
+                    hashMap.put(it, card)
+                }
             }
         }
 

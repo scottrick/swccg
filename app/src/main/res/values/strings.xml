@@ -9,11 +9,15 @@
     <string name="search_side_label">Side</string>
     <string name="search_set_label">Set</string>
     <string name="search_button_text">Search</string>
+    <string name="reset_button_text">Reset</string>
     <string name="search_no_results_toast">No results matching the given search parameters.</string>
     <string name="search_options_label">Filters</string>
+    <string name="flip_card">Flip</string>
+    <string name="rotate_card">Rotate</string>
 
     <string name="search_any_set">Any Set</string>
     <string name="search_any_side">Any Side</string>
-    <string name="search_any_cardtype">Any Type</string>
+    <string name="search_any_card_type">Any Type</string>
+    <string name="search_any_card_subtype">Any Subtype</string>
 
 </resources>

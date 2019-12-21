@@ -1,46 +1,50 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".fragments.SingleCardFragment">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:layout_gravity="center"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+    <androidx.appcompat.widget.AppCompatImageView
+        android:id="@+id/card_imageview"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:adjustViewBounds="true"
+        android:scaleType="fitCenter"
+        android:layout_marginTop="@dimen/default_padding"
+        android:layout_marginBottom="@dimen/default_padding"
+        app:layout_constraintBottom_toTopOf="@id/rotate_button"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:src="@mipmap/loading_large" />
 
-        <androidx.appcompat.widget.AppCompatImageView
-            android:id="@+id/card_imageview"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:scaleType="fitCenter"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/rotate_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/default_padding"
+        android:backgroundTint="@color/textDarkSecondary"
+        android:text="@string/rotate_card"
+        android:textColor="@color/textLightSecondary"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/card_imageview"
+        app:layout_constraintBottom_toBottomOf="parent"
+        />
 
-        <androidx.appcompat.widget.AppCompatButton
-            android:id="@+id/rotate_button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:backgroundTint="@color/textDarkSecondary"
-            android:text="@string/rotate_card"
-            android:textColor="@color/textLightSecondary"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/card_imageview" />
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/flip_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/default_padding"
+        android:backgroundTint="@color/textDarkSecondary"
+        android:text="@string/flip_card"
+        android:textColor="@color/textLightSecondary"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/card_imageview"
+        app:layout_constraintBottom_toBottomOf="parent"
+         />
 
-        <androidx.appcompat.widget.AppCompatButton
-            android:id="@+id/flip_button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:backgroundTint="@color/textDarkSecondary"
-            android:text="@string/flip_card"
-            android:textColor="@color/textLightSecondary"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/card_imageview" />
-
-    </androidx.constraintlayout.widget.ConstraintLayout>
-</FrameLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>
 

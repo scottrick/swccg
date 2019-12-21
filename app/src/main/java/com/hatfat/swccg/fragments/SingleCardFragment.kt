@@ -16,11 +16,16 @@ import androidx.navigation.fragment.navArgs
 import com.bumptech.glide.Glide
 import com.hatfat.swccg.R
 import com.hatfat.swccg.app.InjectionGraph
+import com.hatfat.swccg.data.SWCCGConfig
 import com.hatfat.swccg.viewmodels.SingleCardViewModel
+import javax.inject.Inject
 
 class SingleCardFragment : Fragment() {
 
     private lateinit var viewModel: SingleCardViewModel
+
+    @Inject
+    lateinit var config: SWCCGConfig
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -47,7 +52,13 @@ class SingleCardFragment : Fragment() {
         val flipButton = view.findViewById<Button>(R.id.flip_button)
 
         viewModel.cardUrl.observe(viewLifecycleOwner, Observer<String> {
-            Glide.with(this).load(it).into(cardImageView)
+            if (config.shouldUsePlaystoreImages) {
+                Glide.with(this).load(it).override(31, 44).placeholder(R.mipmap.loading_large)
+                    .into(cardImageView)
+            } else {
+                Glide.with(this).load(it).placeholder(R.mipmap.loading_large)
+                    .into(cardImageView)
+            }
         })
 
         viewModel.isRotated.observe(viewLifecycleOwner, Observer {

@@ -1,13 +1,14 @@
 package com.hatfat.swccg.app
 
 import android.content.res.Resources
-import com.bumptech.glide.Glide
 import com.google.gson.Gson
+import com.hatfat.swccg.data.SWCCGConfig
 import dagger.Module
 import dagger.Provides
+import javax.inject.Singleton
 
 @Module
-class ApplicationModule  {
+class ApplicationModule {
 
     @Provides
     fun provideResources(application: SWCCGApplication): Resources {
@@ -17,5 +18,13 @@ class ApplicationModule  {
     @Provides
     fun provideGson(): Gson {
         return Gson()
+    }
+
+    @Provides
+    @Singleton
+    fun providesConfig(): SWCCGConfig {
+        return SWCCGConfig(
+            shouldUsePlaystoreImages = false
+        )
     }
 }

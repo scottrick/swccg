@@ -17,6 +17,7 @@ import com.hatfat.swccg.adapters.CardListAdapter
 import com.hatfat.swccg.app.InjectionGraph
 import com.hatfat.swccg.app.SWCCGApplication
 import com.hatfat.swccg.data.SWCCGCard
+import com.hatfat.swccg.data.SWCCGConfig
 import com.hatfat.swccg.repo.MetaDataRepository
 import com.hatfat.swccg.viewmodels.CardListViewModel
 import com.hatfat.swccg.viewmodels.SWCCGViewModelFactory
@@ -26,6 +27,9 @@ class CardListFragment : Fragment() {
 
     @Inject
     lateinit var swccgApplication: SWCCGApplication
+
+    @Inject
+    lateinit var config: SWCCGConfig
 
     @Inject
     lateinit var swccgViewModelFactory: SWCCGViewModelFactory
@@ -64,11 +68,15 @@ class CardListFragment : Fragment() {
         val types = metaDataRepository.cardTypes.value ?: HashMap()
 
         val cardListAdapter =
-            CardListAdapter(swccgApplication, types, object : CardListAdapter.CardSelectedInterface {
-                override fun onCardSelected(card: SWCCGCard) {
-                    viewModel.navigateTo(card)
-                }
-            })
+            CardListAdapter(
+                swccgApplication,
+                types,
+                config,
+                object : CardListAdapter.CardSelectedInterface {
+                    override fun onCardSelected(card: SWCCGCard) {
+                        viewModel.navigateTo(card)
+                    }
+                })
 
         view?.findViewById<RecyclerView>(R.id.card_recyclerview)?.apply {
             this.layoutManager = LinearLayoutManager(this.context)

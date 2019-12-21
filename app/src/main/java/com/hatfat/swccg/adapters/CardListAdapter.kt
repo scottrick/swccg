@@ -11,11 +11,13 @@ import com.bumptech.glide.Glide
 import com.hatfat.swccg.R
 import com.hatfat.swccg.data.SWCCGCard
 import com.hatfat.swccg.data.SWCCGCardType
+import com.hatfat.swccg.data.SWCCGConfig
 import java.util.*
 
 class CardListAdapter(
     val context: Context,
     val types: Map<String, SWCCGCardType>,
+    val config: SWCCGConfig,
     val cardSelectedInterface: CardSelectedInterface
 ) : RecyclerView.Adapter<CardListAdapter.ViewHolder>() {
 
@@ -42,7 +44,13 @@ class CardListAdapter(
             /* clear old image view */
             imageView.setImageResource(0)
 
-            Glide.with(context).load(card.imageUrlSmall).into(imageView)
+            if (config.shouldUsePlaystoreImages) {
+                Glide.with(context).load(card.imageUrlSmall).override(16, 22)
+                    .placeholder(R.mipmap.loading_small).into(imageView)
+            } else {
+                Glide.with(context).load(card.imageUrlSmall).placeholder(R.mipmap.loading_small)
+                    .into(imageView)
+            }
 
             view.setOnClickListener {
                 cardSelectedInterface.onCardSelected(card)

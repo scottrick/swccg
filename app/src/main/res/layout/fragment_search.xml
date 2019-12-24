@@ -111,7 +111,7 @@
                 android:padding="@dimen/default_padding">
 
                 <androidx.appcompat.widget.AppCompatSpinner
-                    android:id="@+id/set_spinner"
+                    android:id="@+id/side_spinner"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintEnd_toStartOf="@id/type_spinner"
@@ -123,16 +123,16 @@
                     android:id="@+id/type_spinner"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintStart_toEndOf="@id/set_spinner"
+                    app:layout_constraintStart_toEndOf="@id/side_spinner"
                     android:layout_marginStart="@dimen/default_padding"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content" />
 
                 <androidx.appcompat.widget.AppCompatSpinner
-                    android:id="@+id/side_spinner"
+                    android:id="@+id/set_spinner"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintEnd_toStartOf="@id/subtype_spinner"
-                    app:layout_constraintTop_toBottomOf="@id/type_spinner"
+                    app:layout_constraintTop_toBottomOf="@id/side_spinner"
                     android:layout_marginTop="@dimen/default_padding"
                     android:layout_marginEnd="@dimen/default_padding"
                     android:layout_width="0dp"
@@ -140,7 +140,7 @@
 
                 <androidx.appcompat.widget.AppCompatSpinner
                     android:id="@+id/subtype_spinner"
-                    app:layout_constraintStart_toEndOf="@id/side_spinner"
+                    app:layout_constraintStart_toEndOf="@id/set_spinner"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/type_spinner"
                     android:layout_marginTop="@dimen/default_padding"

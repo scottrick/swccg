@@ -33,6 +33,9 @@
         <action
             android:id="@+id/action_searchFragment_to_cardListFragment"
             app:destination="@id/cardListFragment" />
+        <action
+            android:id="@+id/action_searchFragment_to_swipeCardListFragment"
+            app:destination="@id/swipeCardListFragment" />
     </fragment>
     <fragment
         android:id="@+id/cardListFragment"
@@ -44,5 +47,19 @@
         <action
             android:id="@+id/action_cardListFragment_to_viewSingleCardFragment"
             app:destination="@id/viewSingleCardFragment" />
+        <action
+            android:id="@+id/action_cardListFragment_to_swipeCardListFragment"
+            app:destination="@id/swipeCardListFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/swipeCardListFragment"
+        android:name="com.hatfat.swccg.fragments.SwipeCardListFragment"
+        android:label="SwipeCardListFragment" >
+        <argument
+            android:name="cardList"
+            app:argType="com.hatfat.swccg.data.SWCCGCardList" />
+        <argument
+            android:name="selectedIndex"
+            app:argType="integer" />
     </fragment>
 </navigation>

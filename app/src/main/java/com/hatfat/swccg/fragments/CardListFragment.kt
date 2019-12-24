@@ -17,6 +17,7 @@ import com.hatfat.swccg.adapters.CardListAdapter
 import com.hatfat.swccg.app.InjectionGraph
 import com.hatfat.swccg.app.SWCCGApplication
 import com.hatfat.swccg.data.SWCCGCard
+import com.hatfat.swccg.data.SWCCGCardList
 import com.hatfat.swccg.data.SWCCGConfig
 import com.hatfat.swccg.repo.MetaDataRepository
 import com.hatfat.swccg.viewmodels.CardListViewModel
@@ -50,11 +51,15 @@ class CardListFragment : Fragment() {
         viewModel =
             ViewModelProvider(this, swccgViewModelFactory)[CardListViewModel::class.java]
         viewModel.navigateToSingleCard.observe(this, Observer {
-            it?.let {
-                findNavController().navigate(
-                    CardListFragmentDirections.actionCardListFragmentToViewSingleCardFragment(it)
-                )
-                viewModel.doneNavigating()
+            it?.let { card ->
+                viewModel.cardList.value?.let {
+                    findNavController().navigate(
+                        CardListFragmentDirections.actionCardListFragmentToSwipeCardListFragment(
+                            SWCCGCardList(it), args.cards.cards.indexOf(card)
+                        )
+                    )
+                    viewModel.doneNavigating()
+                }
             }
         })
     }

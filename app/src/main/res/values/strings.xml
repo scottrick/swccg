@@ -2,7 +2,7 @@
     <string name="app_name">Comlink</string>
 
     <string name="search_string_label">Search Text</string>
-    <string name="search_string_hint">Enter Search Text, I.e. \"Trooper Guard\"</string>
+    <string name="search_string_hint">Enter Search Text, I.e. \"Comlink\"</string>
     <string name="search_title_label">Title</string>
     <string name="search_lore_label">Lore</string>
     <string name="search_gametext_label">Gametext</string>

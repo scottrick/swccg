@@ -222,9 +222,7 @@ class SearchFragment : Fragment(), AdapterView.OnItemSelectedListener {
                     ).show()
                 } else {
                     findNavController().navigate(
-                        SearchFragmentDirections.actionSearchFragmentToCardListFragment(
-                            SWCCGCardList(it)
-                        )
+                        SearchFragmentDirections.actionSearchFragmentToSwipeCardListFragment(SWCCGCardList(it), 0)
                     )
                 }
 

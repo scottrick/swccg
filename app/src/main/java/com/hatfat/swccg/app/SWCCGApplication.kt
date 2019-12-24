@@ -23,6 +23,7 @@ interface ApplicationComponent {
     fun inject(fragment: SearchFragment)
     fun inject(fragment: SettingsFragment)
     fun inject(fragment: SingleCardFragment)
+    fun inject(fragment: SwipeCardListFragment)
 
     @Component.Builder
     interface Builder {

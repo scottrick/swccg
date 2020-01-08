@@ -3,6 +3,7 @@ package com.hatfat.swccg.app
 import android.app.Application
 import com.hatfat.swccg.fragments.*
 import com.hatfat.swccg.repo.CardRepository
+import com.hatfat.swccg.repo.FormatRepository
 import com.hatfat.swccg.repo.MetaDataRepository
 import com.hatfat.swccg.repo.SetRepository
 import dagger.BindsInstance
@@ -45,6 +46,9 @@ class SWCCGApplication : Application() {
 
     @Inject
     lateinit var setRepository: SetRepository
+
+    @Inject
+    lateinit var formatRepository: FormatRepository
 
     override fun onCreate() {
         super.onCreate()

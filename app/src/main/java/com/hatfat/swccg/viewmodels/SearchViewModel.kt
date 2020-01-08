@@ -1,13 +1,13 @@
 package com.hatfat.swccg.viewmodels
 
 import android.content.res.Resources
-import android.util.Log
 import androidx.lifecycle.*
 import androidx.lifecycle.Observer
 import com.hatfat.swccg.R
 import com.hatfat.swccg.data.*
 import com.hatfat.swccg.filter.*
 import com.hatfat.swccg.repo.CardRepository
+import com.hatfat.swccg.repo.FormatRepository
 import com.hatfat.swccg.repo.MetaDataRepository
 import com.hatfat.swccg.repo.SetRepository
 import kotlinx.coroutines.Dispatchers
@@ -18,13 +18,15 @@ import java.util.*
 import javax.inject.Inject
 
 class SearchViewModel @Inject constructor(
+    val resources: Resources,
     val cardRepository: CardRepository,
     val metaDataRepository: MetaDataRepository,
-    val resources: Resources,
-    val setRepository: SetRepository
+    val setRepository: SetRepository,
+    val formatRepository: FormatRepository
 ) : ViewModel() {
 
     enum class State {
+        LOADING,
         ENTERING_INFO,
         SEARCHING,
     }
@@ -34,6 +36,7 @@ class SearchViewModel @Inject constructor(
     private val anyCardType = SWCCGCardType("", resources.getString(R.string.search_any_card_type))
     private val anyCardSubType =
         SWCCGCardSubType("", resources.getString(R.string.search_any_card_subtype))
+    private val anyFormat = SWCCGFormat("", resources.getString(R.string.search_any_format))
 
     private val searchStringLiveData = MutableLiveData<String>()
     private val searchTitleLiveData = MutableLiveData<Boolean>()
@@ -49,12 +52,12 @@ class SearchViewModel @Inject constructor(
         this.addSource(searchGametextLiveData, observer)
         this.addSource(searchLoreLiveData, observer)
     }
-    private val stateLiveData = MutableLiveData<State>()
     private val searchResultsLiveData = MutableLiveData<List<SWCCGCard>>()
     private val selectedSetLiveData = MutableLiveData<SWCCGSet>()
     private val selectedSideLiveData = MutableLiveData<SWCCGSide>()
     private val selectedCardTypeLiveData = MutableLiveData<SWCCGCardType>()
     private val selectedCardSubTypeLiveData = MutableLiveData<SWCCGCardSubType>()
+    private val selectedFormatLiveData = MutableLiveData<SWCCGFormat>()
 
     val searchString: LiveData<String>
         get() = searchStringLiveData
@@ -70,9 +73,6 @@ class SearchViewModel @Inject constructor(
 
     val searchLore: LiveData<Boolean>
         get() = searchLoreLiveData
-
-    val state: LiveData<State>
-        get() = stateLiveData
 
     val searchResults: LiveData<List<SWCCGCard>>
         get() = searchResultsLiveData
@@ -107,6 +107,45 @@ class SearchViewModel @Inject constructor(
             cardSubTypes
         }
 
+    val formatTypes: LiveData<List<SWCCGFormat>> =
+        Transformations.map(formatRepository.formats) {
+            val formatTypes = it.values.toMutableList()
+            formatTypes.sort()
+            formatTypes.add(0, anyFormat)
+            formatTypes
+        }
+
+    val loaded: LiveData<Boolean> = MediatorLiveData<Boolean>().apply {
+        val observer = Observer<Boolean> {
+            this.value = cardRepository.loaded.value ?: false &&
+                    formatRepository.loaded.value ?: false &&
+                    metaDataRepository.loaded.value ?: false &&
+                    setRepository.loaded.value ?: false
+        }
+
+        this.addSource(cardRepository.loaded, observer)
+        this.addSource(formatRepository.loaded, observer)
+        this.addSource(metaDataRepository.loaded, observer)
+        this.addSource(setRepository.loaded, observer)
+    }
+
+    private val stateLiveData: MediatorLiveData<State> = MediatorLiveData()
+
+    init {
+        stateLiveData.addSource(loaded) {
+            if (!it) {
+                stateLiveData.value = State.LOADING
+            } else if (it && state.value == State.LOADING) {
+                stateLiveData.value = State.ENTERING_INFO
+            }
+        }
+
+        stateLiveData.value = State.LOADING
+    }
+
+    val state: LiveData<State>
+        get() = stateLiveData
+
     val selectedSet: LiveData<SWCCGSet>
         get() = selectedSetLiveData
 
@@ -119,8 +158,10 @@ class SearchViewModel @Inject constructor(
     val selectedCardSubType: LiveData<SWCCGCardSubType>
         get() = selectedCardSubTypeLiveData
 
+    val selectedFormat: LiveData<SWCCGFormat>
+        get() = selectedFormatLiveData
+
     init {
-        stateLiveData.value = State.ENTERING_INFO
         reset()
     }
 
@@ -133,6 +174,7 @@ class SearchViewModel @Inject constructor(
         selectedSideLiveData.value = anySide
         selectedCardTypeLiveData.value = anyCardType
         selectedCardSubTypeLiveData.value = anyCardSubType
+        selectedFormatLiveData.value = anyFormat
     }
 
     fun resetPressed() {
@@ -167,9 +209,15 @@ class SearchViewModel @Inject constructor(
         selectedCardSubTypeLiveData.value = newValue
     }
 
-    fun searchPressed(searchString: String) {
-        searchStringLiveData.value = searchString
+    fun setSelectedFormat(newValue: SWCCGFormat) {
+        selectedFormatLiveData.value = newValue
+    }
 
+    fun setSearchString(newValue: String) {
+        searchStringLiveData.value = newValue
+    }
+
+    fun searchPressed() {
         stateLiveData.value = State.SEARCHING
         GlobalScope.launch(Dispatchers.IO) {
             doSearch()
@@ -199,26 +247,32 @@ class SearchViewModel @Inject constructor(
         }
 
         selectedSet.value?.let {
-            if (!it.equals(anySet)) {
+            if (it != anySet) {
                 filters.add(SetFilter(it))
             }
         }
 
         selectedSide.value?.let {
-            if (!it.equals(anySide)) {
+            if (it != anySide) {
                 filters.add(SideFilter(it))
             }
         }
 
         selectedCardType.value?.let {
-            if (!it.equals(anyCardType)) {
+            if (it != anyCardType) {
                 filters.add(CardTypeFilter(it))
             }
         }
 
         selectedCardSubType.value?.let {
-            if (!it.equals(anyCardSubType)) {
+            if (it != anyCardSubType) {
                 filters.add(CardSubTypeFilter(it))
+            }
+        }
+
+        selectedFormat.value?.let {
+            if (it != anyFormat) {
+                filters.add(FormatFilter(it))
             }
         }
 
@@ -230,7 +284,7 @@ class SearchViewModel @Inject constructor(
 
         withContext(Dispatchers.Main) {
             searchResultsLiveData.value = results
-            stateLiveData.postValue(State.ENTERING_INFO)
+            stateLiveData.value = State.ENTERING_INFO
         }
     }
 }

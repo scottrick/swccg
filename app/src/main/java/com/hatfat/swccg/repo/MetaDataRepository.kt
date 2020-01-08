@@ -21,7 +21,7 @@ import javax.inject.Singleton
 class MetaDataRepository @Inject constructor(
     private val resources: Resources,
     private val gson: Gson
-) {
+) : SWCCGRepository() {
     /* code -> SWCCGCardType */
     private val cardTypesLiveData = MutableLiveData<Map<String, SWCCGCardType>>()
     /* code -> SWCCGCardSubType */
@@ -80,6 +80,7 @@ class MetaDataRepository @Inject constructor(
             cardTypesLiveData.value = typesHashMap
             cardSubTypesLiveData.value = subtypesHashMap
             sidesLiveData.value = sidesHashMap
+            loadedLiveData.value = true
         }
     }
 }

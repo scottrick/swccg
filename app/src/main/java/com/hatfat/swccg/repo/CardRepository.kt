@@ -22,7 +22,7 @@ class CardRepository @Inject constructor(
     private val resources: Resources,
     private val gson: Gson,
     setRepository: SetRepository
-) {
+) : SWCCGRepository() {
     private val cardHashMapLiveData = MutableLiveData<Map<String, SWCCGCard>>()
     private val cardArrayListLiveData = MutableLiveData<Array<SWCCGCard>>()
 
@@ -72,6 +72,7 @@ class CardRepository @Inject constructor(
         withContext(Dispatchers.Main) {
             cardHashMapLiveData.value = hashMap
             cardArrayListLiveData.value = array
+            loadedLiveData.value = true
         }
     }
 }

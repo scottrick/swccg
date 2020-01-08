@@ -1,0 +1,64 @@
+[
+    {
+        "code": "open",
+        "name": "Open",
+        "all_sets_allowed": true
+    },
+        {
+        "code": "open_no_v",
+        "name": "Open (no v-cards)",
+        "all_sets_allowed": false,
+        "allowed_sets": [
+            "pr",
+            "anh",
+            "hoth",
+            "dah",
+            "cc",
+            "jp",
+            "se",
+            "edr",
+            "ds2",
+            "ref2",
+            "tat",
+            "cor",
+            "ref3",
+            "tp",
+            "two_pp",
+            "jpack",
+            "two_pesb",
+            "rlp",
+            "otsd",
+            "epp",
+            "ecc",
+            "ejp",
+            "jpsd",
+            "ta"
+        ]
+    },
+    {
+        "code": "pr_ds2",
+        "name": "Premiere - DS2",
+        "all_sets_allowed": false,
+        "allowed_sets": [
+            "pr",
+            "anh",
+            "hoth",
+            "dah",
+            "cc",
+            "jp",
+            "se",
+            "edr",
+            "ds2",
+            "two_pp",
+            "jpack",
+            "two_pesb",
+            "rlp",
+            "otsd",
+            "epp",
+            "ecc",
+            "ejp",
+            "jpsd",
+            "ta"
+        ]
+    }
+]

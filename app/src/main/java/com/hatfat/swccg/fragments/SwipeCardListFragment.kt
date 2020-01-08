@@ -18,6 +18,7 @@ import androidx.recyclerview.widget.PagerSnapHelper
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.SCROLL_STATE_IDLE
 import com.hatfat.swccg.R
+import com.hatfat.swccg.adapters.CardLayoutManager
 import com.hatfat.swccg.adapters.FullCardListAdapter
 import com.hatfat.swccg.app.InjectionGraph
 import com.hatfat.swccg.app.SWCCGApplication
@@ -97,6 +98,7 @@ class SwipeCardListFragment : Fragment() {
         view?.findViewById<RecyclerView>(R.id.top_recycler_view)?.apply {
             topRecyclerView = this
             this.layoutManager = LinearLayoutManager(context, orientation, false)
+//            this.layoutManager = CardLayoutManager()
             this.adapter = smallCardListAdapter
         }
 

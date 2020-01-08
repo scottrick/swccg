@@ -19,5 +19,6 @@
     <string name="search_any_side">Any Side</string>
     <string name="search_any_card_type">Any Type</string>
     <string name="search_any_card_subtype">Any Subtype</string>
+    <string name="search_any_format">Any Format</string>
 
 </resources>

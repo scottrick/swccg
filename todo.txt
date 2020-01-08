@@ -1,13 +1,15 @@
+-> create custom layout manager for cards
+
 -> Add AI image url for all AI cards in image_url_2
--> check all images for standard sets
 
 -> Combine virtual set combo cards, similar to objectives (junkyard falcon, emperor's prize)
+
 -> fix destinies that aren't specific numbers (r2, bb8, brainiac, etc)
 
 -> Virtual set #9 locations aren't rotated correctly in the thumbnail version
-
 
 -> What should be the source of truth for ALL card data?  The db?  the json?
 
 INCORRECT CARD IMAGE URLS ON SCOMP LINK:
 I'm getting pretty good at this  (thumbnail)
+boba fett in slave i (thumbnail)

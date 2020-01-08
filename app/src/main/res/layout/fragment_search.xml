@@ -48,10 +48,10 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:hint="@string/search_string_hint"
-                    android:maxLines="1"
-                    android:lines="1"
-                    android:inputType="text"
                     android:imeOptions="actionSearch"
+                    android:inputType="text"
+                    android:lines="1"
+                    android:maxLines="1"
                     android:textColor="@color/textDarkPrimary"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
@@ -112,41 +112,50 @@
 
                 <androidx.appcompat.widget.AppCompatSpinner
                     android:id="@+id/side_spinner"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintEnd_toStartOf="@id/type_spinner"
-                    android:layout_marginEnd="@dimen/default_padding"
                     android:layout_width="0dp"
-                    android:layout_height="wrap_content" />
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="@dimen/default_padding"
+                    app:layout_constraintEnd_toStartOf="@id/type_spinner"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
 
                 <androidx.appcompat.widget.AppCompatSpinner
                     android:id="@+id/type_spinner"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintStart_toEndOf="@id/side_spinner"
-                    android:layout_marginStart="@dimen/default_padding"
                     android:layout_width="0dp"
-                    android:layout_height="wrap_content" />
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/default_padding"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@id/side_spinner"
+                    app:layout_constraintTop_toTopOf="parent" />
 
                 <androidx.appcompat.widget.AppCompatSpinner
                     android:id="@+id/set_spinner"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintEnd_toStartOf="@id/subtype_spinner"
-                    app:layout_constraintTop_toBottomOf="@id/side_spinner"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/default_padding"
                     android:layout_marginEnd="@dimen/default_padding"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content" />
+                    app:layout_constraintEnd_toStartOf="@id/subtype_spinner"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/side_spinner" />
 
                 <androidx.appcompat.widget.AppCompatSpinner
                     android:id="@+id/subtype_spinner"
-                    app:layout_constraintStart_toEndOf="@id/set_spinner"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/type_spinner"
-                    android:layout_marginTop="@dimen/default_padding"
-                    android:layout_marginStart="@dimen/default_padding"
                     android:layout_width="0dp"
-                    android:layout_height="wrap_content" />
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/default_padding"
+                    android:layout_marginTop="@dimen/default_padding"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@id/set_spinner"
+                    app:layout_constraintTop_toBottomOf="@id/type_spinner" />
+
+                <androidx.appcompat.widget.AppCompatSpinner
+                    android:id="@+id/format_spinner"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/default_padding"
+                    app:layout_constraintEnd_toEndOf="@id/set_spinner"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/set_spinner" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -154,12 +163,12 @@
                 android:id="@+id/reset_button"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_gravity="end"
                 android:layout_marginTop="@dimen/default_padding"
                 android:layout_marginBottom="@dimen/default_padding"
+                android:backgroundTint="@color/textDarkSecondary"
                 android:paddingStart="20dp"
                 android:paddingEnd="20dp"
-                android:backgroundTint="@color/textDarkSecondary"
-                android:layout_gravity="end"
                 android:text="@string/reset_button_text"
                 android:textColor="@color/textLightSecondary" />
 

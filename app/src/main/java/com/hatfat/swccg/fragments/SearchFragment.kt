@@ -2,6 +2,8 @@ package com.hatfat.swccg.fragments
 
 import android.content.Context
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import android.util.Log
 import android.view.KeyEvent
 import android.view.LayoutInflater
@@ -25,7 +27,6 @@ import com.hatfat.swccg.util.hideKeyboard
 import com.hatfat.swccg.viewmodels.SWCCGViewModelFactory
 import com.hatfat.swccg.viewmodels.SearchViewModel
 import javax.inject.Inject
-
 
 class SearchFragment : Fragment(), AdapterView.OnItemSelectedListener {
 
@@ -70,6 +71,7 @@ class SearchFragment : Fragment(), AdapterView.OnItemSelectedListener {
         val sideSpinner = view.findViewById<Spinner>(R.id.side_spinner)
         val typeSpinner = view.findViewById<Spinner>(R.id.type_spinner)
         val subtypeSpinner = view.findViewById<Spinner>(R.id.subtype_spinner)
+        val formatSpinner = view.findViewById<Spinner>(R.id.format_spinner)
 
         val setAdapter =
             ArrayAdapter<SWCCGSet>(view.context, R.layout.view_item, ArrayList<SWCCGSet>())
@@ -98,6 +100,15 @@ class SearchFragment : Fragment(), AdapterView.OnItemSelectedListener {
             )
         subtypeAdapter.setDropDownViewResource(R.layout.view_item)
         subtypeSpinner.adapter = subtypeAdapter
+
+        val formatAdapter =
+            ArrayAdapter<SWCCGFormat>(
+                view.context,
+                R.layout.view_item,
+                ArrayList<SWCCGFormat>()
+            )
+        formatAdapter.setDropDownViewResource(R.layout.view_item)
+        formatSpinner.adapter = formatAdapter
 
         viewModel.sets.observe(viewLifecycleOwner, Observer {
             setAdapter.clear()
@@ -151,13 +162,29 @@ class SearchFragment : Fragment(), AdapterView.OnItemSelectedListener {
             subtypeSpinner.setSelection(subtypeAdapter.getPosition(it))
         })
 
+        viewModel.formatTypes.observe(viewLifecycleOwner, Observer {
+            formatAdapter.clear()
+            formatAdapter.addAll(it)
+
+            /* set the initially selected position */
+            formatSpinner.setSelection(formatAdapter.getPosition(viewModel.selectedFormat.value))
+        })
+
+        viewModel.selectedFormat.observe(viewLifecycleOwner, Observer {
+            /* set the initially selected position */
+            formatSpinner.setSelection(formatAdapter.getPosition(it))
+        })
+
         setSpinner.onItemSelectedListener = this
         sideSpinner.onItemSelectedListener = this
         typeSpinner.onItemSelectedListener = this
         subtypeSpinner.onItemSelectedListener = this
+        formatSpinner.onItemSelectedListener = this
 
         viewModel.searchString.observe(viewLifecycleOwner, Observer {
-            searchStringEditText.setText(it)
+            if (!searchStringEditText.text.toString().equals(it)) {
+                searchStringEditText.setText(it)
+            }
         })
 
         viewModel.searchTitle.observe(viewLifecycleOwner, Observer {
@@ -176,20 +203,33 @@ class SearchFragment : Fragment(), AdapterView.OnItemSelectedListener {
         searchGametextCheckBox.setOnCheckedChangeListener { _, b -> viewModel.gametextToggled(b) }
         searchLoreCheckBox.setOnCheckedChangeListener { _, b -> viewModel.loreToggled(b) }
         resetButton.setOnClickListener { viewModel.resetPressed() }
-        searchButton.setOnClickListener { viewModel.searchPressed(searchStringEditText.text.toString()) }
+        searchButton.setOnClickListener { viewModel.searchPressed() }
 
         viewModel.searchTextEnabled.observe(viewLifecycleOwner, Observer {
             searchStringEditText.isEnabled = it
         })
 
+        searchStringEditText.addTextChangedListener(object : TextWatcher {
+            override fun afterTextChanged(s: Editable?) {
+                viewModel.setSearchString(s.toString())
+            }
+
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+            }
+
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+            }
+        })
+
         searchStringEditText.setOnEditorActionListener(object : OnEditorActionListener {
             override fun onEditorAction(v: TextView?, actionId: Int, event: KeyEvent?): Boolean {
-                if (actionId == EditorInfo.IME_ACTION_SEARCH) {
-                    viewModel.searchPressed(searchStringEditText.text.toString())
-                    return true
+                when (actionId) {
+                    EditorInfo.IME_ACTION_SEARCH -> {
+                        viewModel.searchPressed()
+                        return true
+                    }
+                    else -> return false
                 }
-
-                return false
             }
         })
 
@@ -199,6 +239,7 @@ class SearchFragment : Fragment(), AdapterView.OnItemSelectedListener {
                     progressView.visibility = GONE
                     searchScrollView.visibility = VISIBLE
                 }
+                SearchViewModel.State.LOADING,
                 SearchViewModel.State.SEARCHING -> {
                     progressView.visibility = VISIBLE
                     searchScrollView.visibility = GONE
@@ -222,7 +263,9 @@ class SearchFragment : Fragment(), AdapterView.OnItemSelectedListener {
                     ).show()
                 } else {
                     findNavController().navigate(
-                        SearchFragmentDirections.actionSearchFragmentToCardListFragment(SWCCGCardList((it)))
+                        SearchFragmentDirections.actionSearchFragmentToCardListFragment(
+                            SWCCGCardList((it))
+                        )
                     )
                 }
 
@@ -259,6 +302,11 @@ class SearchFragment : Fragment(), AdapterView.OnItemSelectedListener {
                 parent.getItemAtPosition(
                     position
                 ) as SWCCGCardSubType
+            )
+            R.id.format_spinner -> viewModel.setSelectedFormat(
+                parent.getItemAtPosition(
+                    position
+                ) as SWCCGFormat
             )
         }
     }

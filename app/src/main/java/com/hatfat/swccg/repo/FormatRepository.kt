@@ -5,28 +5,25 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.google.gson.Gson
 import com.hatfat.swccg.R
-import com.hatfat.swccg.data.SWCCGSet
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
+import com.hatfat.swccg.data.SWCCGFormat
+import kotlinx.coroutines.*
 import java.io.BufferedReader
 import java.io.InputStreamReader
 import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
-class SetRepository @Inject constructor(
+class FormatRepository @Inject constructor(
     private val resources: Resources,
     private val gson: Gson
 ) : SWCCGRepository() {
-    private val setLiveData = MutableLiveData<Map<String, SWCCGSet>>()
+    private val formatLiveData = MutableLiveData<Map<String, SWCCGFormat>>()
 
-    val sets: LiveData<Map<String, SWCCGSet>>
-        get() = setLiveData
+    val formats: LiveData<Map<String, SWCCGFormat>>
+        get() = formatLiveData
 
     init {
-        setLiveData.value = HashMap()
+        formatLiveData.value = HashMap()
 
         GlobalScope.launch(Dispatchers.IO) {
             load()
@@ -34,18 +31,18 @@ class SetRepository @Inject constructor(
     }
 
     private suspend fun load() {
-        val inputStream = resources.openRawResource(R.raw.sets)
+        val inputStream = resources.openRawResource(R.raw.formats)
         val reader = BufferedReader(InputStreamReader(inputStream))
 
-        val sets = gson.fromJson(reader, Array<SWCCGSet>::class.java)
+        val formats = gson.fromJson(reader, Array<SWCCGFormat>::class.java)
 
-        val hashMap = HashMap<String, SWCCGSet>()
-        for (set in sets) {
-            hashMap.put(set.code, set)
+        val hashMap = HashMap<String, SWCCGFormat>()
+        for (format in formats) {
+            hashMap.put(format.code, format)
         }
 
         withContext(Dispatchers.Main) {
-            setLiveData.value = hashMap
+            formatLiveData.value = hashMap
             loadedLiveData.value = true
         }
     }

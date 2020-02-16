@@ -159,33 +159,33 @@
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
-            <androidx.appcompat.widget.AppCompatButton
-                android:id="@+id/reset_button"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="end"
+            <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_marginTop="@dimen/default_padding"
                 android:layout_marginBottom="@dimen/default_padding"
-                android:backgroundTint="@color/textDarkSecondary"
-                android:paddingStart="20dp"
-                android:paddingEnd="20dp"
-                android:text="@string/reset_button_text"
-                android:textColor="@color/textLightSecondary" />
-
-            <Space
-                android:layout_width="0dp"
-                android:layout_height="0dp"
-                android:layout_weight="1"
-                android:padding="@dimen/default_padding" />
-
-            <androidx.appcompat.widget.AppCompatButton
-                android:id="@+id/search_button"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:backgroundTint="@color/textDarkSecondary"
-                android:text="@string/search_button_text"
-                android:textColor="@color/textLightSecondary" />
+                android:layout_height="wrap_content" >
 
+                <androidx.appcompat.widget.AppCompatButton
+                    android:id="@+id/reset_button"
+                    android:layout_width="100dp"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    android:backgroundTint="@color/textDarkSecondary"
+                    android:text="@string/reset_button_text"
+                    android:textColor="@color/textLightSecondary" />
+
+                <androidx.appcompat.widget.AppCompatButton
+                    android:id="@+id/search_button"
+                    android:layout_width="100dp"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    android:backgroundTint="@color/textDarkSecondary"
+                    android:text="@string/search_button_text"
+                    android:textColor="@color/textLightSecondary" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
         </LinearLayout>
     </ScrollView>
 </FrameLayout>

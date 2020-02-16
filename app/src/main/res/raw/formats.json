@@ -36,6 +36,26 @@
         ]
     },
     {
+        "code": "pr_se",
+        "name": "Premiere - SE",
+        "all_sets_allowed": false,
+        "allowed_sets": [
+            "pr",
+            "anh",
+            "hoth",
+            "dah",
+            "cc",
+            "jp",
+            "se",
+            "two_pp",
+            "jpack",
+            "two_pesb",
+            "rlp",
+            "otsd",
+            "epp"
+        ]
+    },
+    {
         "code": "pr_ds2",
         "name": "Premiere - DS2",
         "all_sets_allowed": false,

@@ -1,3 +1,8 @@
+Fix typos in JSON data.
+Fix location gametext search not having DS.
+
+---------------------------------------------------------
+
 -> create custom layout manager for cards
 
 -> Add AI image url for all AI cards in image_url_2

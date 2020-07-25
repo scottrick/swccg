@@ -1,86 +1,88 @@
 package com.hatfat.swccg.repo
 
-import android.content.res.Resources
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import com.google.gson.Gson
-import com.hatfat.swccg.R
-import com.hatfat.swccg.data.SWCCGCardSubType
-import com.hatfat.swccg.data.SWCCGCardType
-import com.hatfat.swccg.data.SWCCGSide
+import com.hatfat.swccg.data.SWCCGCard
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import java.io.BufferedReader
-import java.io.InputStreamReader
 import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
 class MetaDataRepository @Inject constructor(
-    private val resources: Resources,
-    private val gson: Gson
+    cardRepository: CardRepository
 ) : SWCCGRepository() {
-    /* code -> SWCCGCardType */
-    private val cardTypesLiveData = MutableLiveData<Map<String, SWCCGCardType>>()
-    /* code -> SWCCGCardSubType */
-    private val cardSubTypesLiveData = MutableLiveData<Map<String, SWCCGCardSubType>>()
-    /* code -> SWCCGSide */
-    private val sidesLiveData = MutableLiveData<Map<String, SWCCGSide>>()
+    private val cardTypesLiveData = MutableLiveData<Set<String>>()
+    private val cardSubTypesLiveData = MutableLiveData<Set<String>>()
+    private val setsLiveData = MutableLiveData<Set<String>>()
+    private val sidesLiveData = MutableLiveData<Set<String>>()
 
-    val cardTypes: LiveData<Map<String, SWCCGCardType>>
+    val cardTypes: LiveData<Set<String>>
         get() = cardTypesLiveData
 
-    val cardSubTypes: LiveData<Map<String, SWCCGCardSubType>>
+    val cardSubTypes: LiveData<Set<String>>
         get() = cardSubTypesLiveData
 
-    val sides: LiveData<Map<String, SWCCGSide>>
+    val sides: LiveData<Set<String>>
         get() = sidesLiveData
 
-    init {
-        cardTypesLiveData.value = HashMap()
-        cardSubTypesLiveData.value = HashMap()
-        sidesLiveData.value = HashMap()
+    val sets: LiveData<Set<String>>
+        get() = setsLiveData
 
-        GlobalScope.launch(Dispatchers.IO) {
-            load()
+    init {
+        cardTypesLiveData.value = HashSet()
+        cardSubTypesLiveData.value = HashSet()
+        sidesLiveData.value = HashSet()
+        setsLiveData.value = HashSet()
+
+        cardRepository.cardsArray.observeForever {
+            it?.let {
+                GlobalScope.launch(Dispatchers.IO) {
+                    load(it)
+                }
+            }
         }
     }
 
-    private suspend fun load() {
-        val subtypesInputStream = resources.openRawResource(R.raw.subtypes)
-        val typesInputStream = resources.openRawResource(R.raw.types)
-        val sidesInputStream = resources.openRawResource(R.raw.sides)
-        val typesReader = BufferedReader(InputStreamReader(typesInputStream))
-        val subtypesReader = BufferedReader(InputStreamReader(subtypesInputStream))
-        val sidesReader = BufferedReader(InputStreamReader(sidesInputStream))
+    private suspend fun load(cards: Array<SWCCGCard>) {
+        val typesHashSet = HashSet<String>()
+        val subtypesHashSet = HashSet<String>()
+        val sidesHashSet = HashSet<String>()
+        val setsHashSet = HashSet<String>()
 
-        val types = gson.fromJson(typesReader, Array<SWCCGCardType>::class.java)
-        val subtypes = gson.fromJson(subtypesReader, Array<SWCCGCardSubType>::class.java)
-        val sides = gson.fromJson(sidesReader, Array<SWCCGSide>::class.java)
+        /* populate the metadata sets based on the cards we loaded */
+        for (card in cards) {
+            if (!card.set.isNullOrBlank()) {
+                setsHashSet.add(card.set.trim())
+            }
 
-        val typesHashMap = HashMap<String, SWCCGCardType>()
-        val subtypesHashMap = HashMap<String, SWCCGCardSubType>()
-        val sidesHashMap = HashMap<String, SWCCGSide>()
+            if (!card.front.type.isNullOrBlank()) {
+                if (card.front.type.contains("#")) {
+                    val fixedType = card.front.type.substring(0, card.front.type.indexOf("#"))
+                    typesHashSet.add(fixedType.trim())
+                }
+                else {
+                    typesHashSet.add(card.front.type)
+                }
+            }
 
-        for (type in types) {
-            typesHashMap.put(type.code, type)
-        }
+            if (!card.front.subType.isNullOrBlank()) {
+                subtypesHashSet.add(card.front.subType)
+            }
 
-        for (subtype in subtypes) {
-            subtypesHashMap.put(subtype.code, subtype)
-        }
-
-        for (side in sides) {
-            sidesHashMap.put(side.code, side)
+            if (!card.side.isNullOrBlank()) {
+                sidesHashSet.add(card.side)
+            }
         }
 
         withContext(Dispatchers.Main) {
-            cardTypesLiveData.value = typesHashMap
-            cardSubTypesLiveData.value = subtypesHashMap
-            sidesLiveData.value = sidesHashMap
+            cardTypesLiveData.value = typesHashSet
+            cardSubTypesLiveData.value = subtypesHashSet
+            sidesLiveData.value = sidesHashSet
             loadedLiveData.value = true
+            setsLiveData.value = setsHashSet
         }
     }
 }

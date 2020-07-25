@@ -6,7 +6,10 @@ import androidx.lifecycle.MutableLiveData
 import com.google.gson.Gson
 import com.hatfat.swccg.R
 import com.hatfat.swccg.data.SWCCGFormat
-import kotlinx.coroutines.*
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import java.io.BufferedReader
 import java.io.InputStreamReader
 import javax.inject.Inject

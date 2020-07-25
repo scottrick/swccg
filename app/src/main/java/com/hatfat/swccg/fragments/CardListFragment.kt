@@ -70,12 +70,9 @@ class CardListFragment : Fragment() {
     ): View? {
         val view = inflater.inflate(R.layout.fragment_card_list, container, false)
 
-        val types = metaDataRepository.cardTypes.value ?: HashMap()
-
         val cardListAdapter =
             CardListAdapter(
                 swccgApplication,
-                types,
                 config,
                 object : CardListAdapter.CardSelectedInterface {
                     override fun onCardSelected(card: SWCCGCard) {

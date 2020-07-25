@@ -24,7 +24,7 @@ class SwipeCardListViewModel : ViewModel()
         get() = cardListLiveData
 
     val isFlippable: LiveData<Boolean> = Transformations.map(currentCardIndexLiveData) {
-        cardList.value?.get(it)?.hasImageUrl2
+        cardList.value?.get(it)?.isFlippable
     }
 
     fun setCardList(cardList: List<SWCCGCard>) {

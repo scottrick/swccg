@@ -4,12 +4,12 @@ import android.content.res.Resources
 import androidx.lifecycle.*
 import androidx.lifecycle.Observer
 import com.hatfat.swccg.R
-import com.hatfat.swccg.data.*
+import com.hatfat.swccg.data.SWCCGCard
+import com.hatfat.swccg.data.SWCCGFormat
 import com.hatfat.swccg.filter.*
 import com.hatfat.swccg.repo.CardRepository
 import com.hatfat.swccg.repo.FormatRepository
 import com.hatfat.swccg.repo.MetaDataRepository
-import com.hatfat.swccg.repo.SetRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
@@ -21,7 +21,6 @@ class SearchViewModel @Inject constructor(
     val resources: Resources,
     val cardRepository: CardRepository,
     val metaDataRepository: MetaDataRepository,
-    val setRepository: SetRepository,
     val formatRepository: FormatRepository
 ) : ViewModel() {
 
@@ -31,11 +30,10 @@ class SearchViewModel @Inject constructor(
         SEARCHING,
     }
 
-    private val anySet = SWCCGSet("", name = resources.getString(R.string.search_any_set))
-    private val anySide = SWCCGSide("", resources.getString(R.string.search_any_side))
-    private val anyCardType = SWCCGCardType("", resources.getString(R.string.search_any_card_type))
-    private val anyCardSubType =
-        SWCCGCardSubType("", resources.getString(R.string.search_any_card_subtype))
+    private val anySet = resources.getString(R.string.search_any_set)
+    private val anySide = resources.getString(R.string.search_any_side)
+    private val anyCardType = resources.getString(R.string.search_any_card_type)
+    private val anyCardSubType = resources.getString(R.string.search_any_card_subtype)
     private val anyFormat = SWCCGFormat("", resources.getString(R.string.search_any_format))
 
     private val searchStringLiveData = MutableLiveData<String>()
@@ -53,10 +51,10 @@ class SearchViewModel @Inject constructor(
         this.addSource(searchLoreLiveData, observer)
     }
     private val searchResultsLiveData = MutableLiveData<List<SWCCGCard>>()
-    private val selectedSetLiveData = MutableLiveData<SWCCGSet>()
-    private val selectedSideLiveData = MutableLiveData<SWCCGSide>()
-    private val selectedCardTypeLiveData = MutableLiveData<SWCCGCardType>()
-    private val selectedCardSubTypeLiveData = MutableLiveData<SWCCGCardSubType>()
+    private val selectedSetLiveData = MutableLiveData<String>()
+    private val selectedSideLiveData = MutableLiveData<String>()
+    private val selectedCardTypeLiveData = MutableLiveData<String>()
+    private val selectedCardSubTypeLiveData = MutableLiveData<String>()
     private val selectedFormatLiveData = MutableLiveData<SWCCGFormat>()
 
     val searchString: LiveData<String>
@@ -77,31 +75,31 @@ class SearchViewModel @Inject constructor(
     val searchResults: LiveData<List<SWCCGCard>>
         get() = searchResultsLiveData
 
-    val sets: LiveData<List<SWCCGSet>> = Transformations.map(setRepository.sets) {
-        val sets = it.values.toMutableList()
+    val sets: LiveData<List<String>> = Transformations.map(metaDataRepository.sets) {
+        val sets = it.toMutableList()
         sets.sort()
         sets.add(0, anySet)
         sets
     }
 
-    val sides: LiveData<List<SWCCGSide>> = Transformations.map(metaDataRepository.sides) {
-        val sides = it.values.toMutableList()
+    val sides: LiveData<List<String>> = Transformations.map(metaDataRepository.sides) {
+        val sides = it.toMutableList()
         sides.sort()
         sides.add(0, anySide)
         sides
     }
 
-    val cardTypes: LiveData<List<SWCCGCardType>> =
+    val cardTypes: LiveData<List<String>> =
         Transformations.map(metaDataRepository.cardTypes) {
-            val cardTypes = it.values.toMutableList()
+            val cardTypes = it.toMutableList()
             cardTypes.sort()
             cardTypes.add(0, anyCardType)
             cardTypes
         }
 
-    val cardSubTypes: LiveData<List<SWCCGCardSubType>> =
+    val cardSubTypes: LiveData<List<String>> =
         Transformations.map(metaDataRepository.cardSubTypes) {
-            val cardSubTypes = it.values.toMutableList()
+            val cardSubTypes = it.toMutableList()
             cardSubTypes.sort()
             cardSubTypes.add(0, anyCardSubType)
             cardSubTypes
@@ -119,14 +117,12 @@ class SearchViewModel @Inject constructor(
         val observer = Observer<Boolean> {
             this.value = cardRepository.loaded.value ?: false &&
                     formatRepository.loaded.value ?: false &&
-                    metaDataRepository.loaded.value ?: false &&
-                    setRepository.loaded.value ?: false
+                    metaDataRepository.loaded.value ?: false
         }
 
         this.addSource(cardRepository.loaded, observer)
         this.addSource(formatRepository.loaded, observer)
         this.addSource(metaDataRepository.loaded, observer)
-        this.addSource(setRepository.loaded, observer)
     }
 
     private val stateLiveData: MediatorLiveData<State> = MediatorLiveData()
@@ -146,16 +142,16 @@ class SearchViewModel @Inject constructor(
     val state: LiveData<State>
         get() = stateLiveData
 
-    val selectedSet: LiveData<SWCCGSet>
+    val selectedSet: LiveData<String>
         get() = selectedSetLiveData
 
-    val selectedSide: LiveData<SWCCGSide>
+    val selectedSide: LiveData<String>
         get() = selectedSideLiveData
 
-    val selectedCardType: LiveData<SWCCGCardType>
+    val selectedCardType: LiveData<String>
         get() = selectedCardTypeLiveData
 
-    val selectedCardSubType: LiveData<SWCCGCardSubType>
+    val selectedCardSubType: LiveData<String>
         get() = selectedCardSubTypeLiveData
 
     val selectedFormat: LiveData<SWCCGFormat>
@@ -193,19 +189,19 @@ class SearchViewModel @Inject constructor(
         searchLoreLiveData.value = newValue
     }
 
-    fun setSelectedSet(newValue: SWCCGSet) {
+    fun setSelectedSet(newValue: String) {
         selectedSetLiveData.value = newValue
     }
 
-    fun setSelectedSide(newValue: SWCCGSide) {
+    fun setSelectedSide(newValue: String) {
         selectedSideLiveData.value = newValue
     }
 
-    fun setSelectedCardType(newValue: SWCCGCardType) {
+    fun setSelectedCardType(newValue: String) {
         selectedCardTypeLiveData.value = newValue
     }
 
-    fun setSelectedCardSubType(newValue: SWCCGCardSubType) {
+    fun setSelectedCardSubType(newValue: String) {
         selectedCardSubTypeLiveData.value = newValue
     }
 

@@ -21,8 +21,8 @@ import androidx.navigation.fragment.findNavController
 import com.hatfat.swccg.R
 import com.hatfat.swccg.app.InjectionGraph
 import com.hatfat.swccg.app.SWCCGApplication
-import com.hatfat.swccg.data.*
-import com.hatfat.swccg.repo.MetaDataRepository
+import com.hatfat.swccg.data.SWCCGCardList
+import com.hatfat.swccg.data.SWCCGFormat
 import com.hatfat.swccg.util.hideKeyboard
 import com.hatfat.swccg.viewmodels.SWCCGViewModelFactory
 import com.hatfat.swccg.viewmodels.SearchViewModel
@@ -35,9 +35,6 @@ class SearchFragment : Fragment(), AdapterView.OnItemSelectedListener {
 
     @Inject
     lateinit var swccgViewModelFactory: SWCCGViewModelFactory
-
-    @Inject
-    lateinit var metaDataRepository: MetaDataRepository
 
     private lateinit var viewModel: SearchViewModel
 
@@ -74,29 +71,29 @@ class SearchFragment : Fragment(), AdapterView.OnItemSelectedListener {
         val formatSpinner = view.findViewById<Spinner>(R.id.format_spinner)
 
         val setAdapter =
-            ArrayAdapter<SWCCGSet>(view.context, R.layout.view_item, ArrayList<SWCCGSet>())
+            ArrayAdapter<String>(view.context, R.layout.view_item, ArrayList<String>())
         setAdapter.setDropDownViewResource(R.layout.view_item)
         setSpinner.adapter = setAdapter
 
         val sideAdapter =
-            ArrayAdapter<SWCCGSide>(view.context, R.layout.view_item, ArrayList<SWCCGSide>())
+            ArrayAdapter<String>(view.context, R.layout.view_item, ArrayList<String>())
         sideAdapter.setDropDownViewResource(R.layout.view_item)
         sideSpinner.adapter = sideAdapter
 
         val typeAdapter =
-            ArrayAdapter<SWCCGCardType>(
+            ArrayAdapter<String>(
                 view.context,
                 R.layout.view_item,
-                ArrayList<SWCCGCardType>()
+                ArrayList<String>()
             )
         typeAdapter.setDropDownViewResource(R.layout.view_item)
         typeSpinner.adapter = typeAdapter
 
         val subtypeAdapter =
-            ArrayAdapter<SWCCGCardSubType>(
+            ArrayAdapter<String>(
                 view.context,
                 R.layout.view_item,
-                ArrayList<SWCCGCardSubType>()
+                ArrayList<String>()
             )
         subtypeAdapter.setDropDownViewResource(R.layout.view_item)
         subtypeSpinner.adapter = subtypeAdapter
@@ -291,17 +288,17 @@ class SearchFragment : Fragment(), AdapterView.OnItemSelectedListener {
 
     override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
         when (parent?.id) {
-            R.id.set_spinner -> viewModel.setSelectedSet(parent.getItemAtPosition(position) as SWCCGSet)
-            R.id.side_spinner -> viewModel.setSelectedSide(parent.getItemAtPosition(position) as SWCCGSide)
+            R.id.set_spinner -> viewModel.setSelectedSet(parent.getItemAtPosition(position) as String)
+            R.id.side_spinner -> viewModel.setSelectedSide(parent.getItemAtPosition(position) as String)
             R.id.type_spinner -> viewModel.setSelectedCardType(
                 parent.getItemAtPosition(
                     position
-                ) as SWCCGCardType
+                ) as String
             )
             R.id.subtype_spinner -> viewModel.setSelectedCardSubType(
                 parent.getItemAtPosition(
                     position
-                ) as SWCCGCardSubType
+                ) as String
             )
             R.id.format_spinner -> viewModel.setSelectedFormat(
                 parent.getItemAtPosition(

@@ -80,20 +80,11 @@ class FullCardListAdapter(val context: Context,
             imageView.setImageResource(0)
             imageView.rotation = if (rotated) 180.0f else 0.0f
 
-            val imageUrlSmall = if (flipped && card.hasImageUrl2) card.imageUrl2Small else card.imageUrlSmall
-            val imageUrlLarge = if (flipped && card.hasImageUrl2) card.imageUrl2Large else card.imageUrlLarge
+            val imageUrl = if (flipped && card.isFlippable) card.back?.imageUrl else card.front.imageUrl
 
-            var largeImageRequest = Glide.with(context).load(imageUrlLarge)
+            var imageRequest = Glide.with(context).load(imageUrl)
                 .placeholder(R.mipmap.loading_large)
                 .error(R.mipmap.loading_large)
-
-            val smallImageRequest = Glide.with(context).load(imageUrlSmall)
-                .placeholder(R.mipmap.loading_small)
-                .error(R.mipmap.loading_small)
-
-            largeImageRequest = largeImageRequest.thumbnail(smallImageRequest)
-
-            var imageRequest = if (isFullscreen) largeImageRequest else smallImageRequest
 
             if (config.shouldUsePlaystoreImages) {
                 imageRequest = imageRequest.override(16, 22)

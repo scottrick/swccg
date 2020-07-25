@@ -20,7 +20,7 @@ class SingleCardViewModel : ViewModel() {
     }
 
     val isFlippable: LiveData<Boolean> = Transformations.map(cardLiveData) {
-        it.hasImageUrl2
+        it.isFlippable
     }
 
     val isRotated: LiveData<Boolean>
@@ -29,11 +29,11 @@ class SingleCardViewModel : ViewModel() {
     private fun updateCardUrl() {
         isFlippedLiveData.value?.let { flipped ->
             cardLiveData.value?.let { card ->
-                if (card.hasImageUrl2 && flipped) {
-                    cardUrl.value = card.imageUrl2Large
+                if (card.isFlippable && flipped) {
+                    cardUrl.value = card.back?.imageUrl
                 }
                 else {
-                    cardUrl.value = card.imageUrlLarge
+                    cardUrl.value = card.front.imageUrl
                 }
             }
         }

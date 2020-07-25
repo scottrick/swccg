@@ -10,13 +10,11 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.hatfat.swccg.R
 import com.hatfat.swccg.data.SWCCGCard
-import com.hatfat.swccg.data.SWCCGCardType
 import com.hatfat.swccg.data.SWCCGConfig
 import java.util.*
 
 class CardListAdapter(
     val context: Context,
-    val types: Map<String, SWCCGCardType>,
     val config: SWCCGConfig,
     val cardSelectedInterface: CardSelectedInterface
 ) : RecyclerView.Adapter<CardListAdapter.ViewHolder>() {
@@ -37,18 +35,20 @@ class CardListAdapter(
         val imageView: ImageView = view.findViewById(R.id.card_imageview)
 
         fun bind(card: SWCCGCard) {
-            nameTextView.text = card.name
-            typeTextView.text = types[card.type_code]?.name ?: card.type_code
-            rarityTextView.text = card.rarity_code
+            rarityTextView.text = card.rarity
 
             /* clear old image view */
             imageView.setImageResource(0)
 
+            val frontSide = card.front
+            nameTextView.text = frontSide.title
+            typeTextView.text = frontSide.type
+
             if (config.shouldUsePlaystoreImages) {
-                Glide.with(context).load(card.imageUrlSmall).override(16, 22)
+                Glide.with(context).load(frontSide.imageUrl).override(16, 22)
                     .placeholder(R.mipmap.loading_small).into(imageView)
             } else {
-                Glide.with(context).load(card.imageUrlSmall).placeholder(R.mipmap.loading_small)
+                Glide.with(context).load(frontSide.imageUrl).placeholder(R.mipmap.loading_small)
                     .into(imageView)
             }
 

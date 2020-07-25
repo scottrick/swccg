@@ -42,7 +42,7 @@
         android:id="@+id/card_rarity"
         android:layout_width="44dp"
         android:layout_height="wrap_content"
-        android:layout_gravity="center_vertical"
+        android:layout_gravity="center"
         android:layout_margin="@dimen/default_padding_2x"
         android:textAlignment="center"
         android:textColor="@color/textDarkSecondary"

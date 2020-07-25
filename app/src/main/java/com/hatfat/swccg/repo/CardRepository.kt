@@ -4,9 +4,9 @@ import android.content.res.Resources
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.google.gson.Gson
-import com.hatfat.swccg.app.SWCCGApplication
+import com.hatfat.swccg.R
 import com.hatfat.swccg.data.SWCCGCard
-import com.hatfat.swccg.data.SWCCGSet
+import com.hatfat.swccg.data.SWCCGCardList
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
@@ -18,15 +18,13 @@ import javax.inject.Singleton
 
 @Singleton
 class CardRepository @Inject constructor(
-    private val application: SWCCGApplication,
     private val resources: Resources,
-    private val gson: Gson,
-    setRepository: SetRepository
+    private val gson: Gson
 ) : SWCCGRepository() {
-    private val cardHashMapLiveData = MutableLiveData<Map<String, SWCCGCard>>()
+    private val cardHashMapLiveData = MutableLiveData<Map<Int, SWCCGCard>>()
     private val cardArrayListLiveData = MutableLiveData<Array<SWCCGCard>>()
 
-    val cardsMap: LiveData<Map<String, SWCCGCard>>
+    val cardsMap: LiveData<Map<Int, SWCCGCard>>
         get() = cardHashMapLiveData
 
     val cardsArray: LiveData<Array<SWCCGCard>>
@@ -35,33 +33,27 @@ class CardRepository @Inject constructor(
     init {
         cardHashMapLiveData.value = HashMap()
 
-        setRepository.sets.observeForever {
-            it?.let {
-                GlobalScope.launch(Dispatchers.IO) {
-                    load(it.values)
-                }
-            }
+        GlobalScope.launch(Dispatchers.IO) {
+            load()
         }
     }
 
-    private suspend fun load(sets: Collection<SWCCGSet>) {
-        val hashMap = HashMap<String, SWCCGCard>()
+    private suspend fun load() {
+        val hashMap = HashMap<Int, SWCCGCard>()
 
-        for (set in sets) {
-            val inputStream = resources.openRawResource(
-                resources.getIdentifier(
-                    set.code,
-                    "raw",
-                    application.packageName
-                )
-            )
+        val cardResources = arrayOf(R.raw.light, R.raw.dark)
+
+        for (resource in cardResources) {
+            val inputStream = resources.openRawResource(resource)
             val reader = BufferedReader(InputStreamReader(inputStream))
+            val cardList = gson.fromJson(reader, SWCCGCardList::class.java)
 
-            val cards = gson.fromJson(reader, Array<SWCCGCard>::class.java)
-
-            for (card in cards) {
-                card.code?.let {
-                    hashMap.put(it, card)
+            for (card in cardList.cards) {
+                card.id?.let {
+                    if (card.legacy == false) {
+                        /* filter out legacy cards */
+                        hashMap.put(it, card)
+                    }
                 }
             }
         }

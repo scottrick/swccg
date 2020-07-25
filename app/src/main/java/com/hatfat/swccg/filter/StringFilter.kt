@@ -9,15 +9,15 @@ class StringFilter constructor(
     val filterLore: Boolean
 ) : Filter() {
     override fun filter(card: SWCCGCard): Boolean {
-        if (filterTitle && card.name?.contains(filterText, true) == true) {
+        if (filterTitle && card.front.title?.contains(filterText, true) == true) {
             return true
         }
 
-        if (filterGametext && card.gametext?.contains(filterText, true) == true) {
+        if (filterGametext && card.front.gametext?.contains(filterText, true) == true) {
             return true
         }
 
-        if (filterLore && card.lore?.contains(filterText, true) == true) {
+        if (filterLore && card.front.lore?.contains(filterText, true) == true) {
             return true
         }
 

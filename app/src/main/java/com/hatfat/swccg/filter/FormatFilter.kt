@@ -7,6 +7,6 @@ class FormatFilter constructor(
     val filterFormat: SWCCGFormat
 ) : Filter() {
     override fun filter(card: SWCCGCard): Boolean {
-        return filterFormat.all_sets_allowed || filterFormat.allowed_sets.contains(card.set_code)
+        return filterFormat.all_sets_allowed || filterFormat.allowed_sets.contains(card.set)
     }
 }

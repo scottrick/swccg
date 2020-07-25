@@ -6,8 +6,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import com.hatfat.swccg.app.InjectionGraph
 import com.hatfat.swccg.R
+import com.hatfat.swccg.app.InjectionGraph
 
 class SettingsFragment : Fragment() {
 

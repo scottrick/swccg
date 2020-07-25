@@ -23,3 +23,5 @@
 -verbose
 -dontoptimize
 -dontobfuscate
+
+-keep class com.hatfat.swccg.data.*

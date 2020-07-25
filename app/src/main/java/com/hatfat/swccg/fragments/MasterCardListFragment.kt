@@ -17,7 +17,6 @@ import com.hatfat.swccg.app.InjectionGraph
 import com.hatfat.swccg.app.SWCCGApplication
 import com.hatfat.swccg.data.SWCCGCard
 import com.hatfat.swccg.data.SWCCGConfig
-import com.hatfat.swccg.repo.MetaDataRepository
 import com.hatfat.swccg.viewmodels.MasterCardListViewModel
 import com.hatfat.swccg.viewmodels.SWCCGViewModelFactory
 import javax.inject.Inject
@@ -32,9 +31,6 @@ class MasterCardListFragment : Fragment() {
 
     @Inject
     lateinit var swccgViewModelFactory: SWCCGViewModelFactory
-
-    @Inject
-    lateinit var metaDataRepository: MetaDataRepository
 
     private lateinit var viewModel: MasterCardListViewModel
 
@@ -61,12 +57,9 @@ class MasterCardListFragment : Fragment() {
     ): View? {
         val view = inflater.inflate(R.layout.fragment_card_list, container, false)
 
-        val types = metaDataRepository.cardTypes.value ?: HashMap()
-
         val cardListAdapter =
             CardListAdapter(
                 swccgApplication,
-                types,
                 config,
                 object : CardListAdapter.CardSelectedInterface {
                     override fun onCardSelected(card: SWCCGCard) {

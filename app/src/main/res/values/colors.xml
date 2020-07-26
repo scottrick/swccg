@@ -10,4 +10,7 @@
     <color name="textLightPrimary">@color/colorAccent</color>
     <color name="textLightSecondary">@color/colorAccentLight</color>
 
+    <color name="card_type_ds_effect">#c70436</color>
+    <color name="card_type_ls_effect">#d24f52</color>
+
 </resources>

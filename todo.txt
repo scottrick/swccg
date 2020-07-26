@@ -1,5 +1,8 @@
-Rotate land locations 90 degrees in small thumbnails
-When comparing card face titles, ignore *** so unique cards are properly sorted
+ToFix:
+    -> Coruscant: Private Platform -> Image not working
+    -> slavei -> slaveI
+    -> Your ship
+
 Fix location gametext search not having DS.
 
 ---------------------------------------------------------

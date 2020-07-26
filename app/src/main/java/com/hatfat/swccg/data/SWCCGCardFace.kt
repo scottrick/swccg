@@ -18,20 +18,37 @@ data class SWCCGCardFace(
     val gametext: String?,
     val lore: String?
 ) : Serializable, Comparable<SWCCGCardFace> {
-    override fun compareTo(other: SWCCGCardFace): Int {
 
-        if (title.isNullOrBlank() && other.title.isNullOrBlank()) {
+    /* default constructor that gson will call.  otherwise the lazy property will not work */
+    constructor() : this(null, null, null, null, null, null, null, null, null, null,null, null, null, null)
+
+    val sortableTitle: String by lazy {
+        var result = title ?: ""
+
+        while (result.startsWith("<>")) {
+            result = result.removePrefix("<>")
+        }
+
+        while (result.startsWith("•")) {
+            result = result.removePrefix("•")
+        }
+
+        result
+    }
+
+    override fun compareTo(other: SWCCGCardFace): Int {
+        if (sortableTitle.isBlank() && other.sortableTitle.isBlank()) {
             return 0;
         }
 
-        if (title.isNullOrBlank()) {
+        if (sortableTitle.isBlank()) {
             return -1
         }
 
-        if (other.title.isNullOrBlank()) {
+        if (other.sortableTitle.isBlank()) {
             return 1
         }
 
-        return title.compareTo(other.title)
+        return sortableTitle.compareTo(other.sortableTitle)
     }
 }

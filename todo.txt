@@ -1,15 +1,9 @@
 ToFix:
-    -> Coruscant: Private Platform -> Image not working
-    -> slavei -> slaveI
-    -> Your ship
-
-Fix location gametext search not having DS.
+    -> Your ship? (V)
 
 ---------------------------------------------------------
 
 -> create custom layout manager for cards
-
--> Add AI image url for all AI cards in image_url_2
 
 -> Combine virtual set combo cards, similar to objectives (junkyard falcon, emperor's prize)
 
@@ -21,4 +15,3 @@ Fix location gametext search not having DS.
 
 INCORRECT CARD IMAGE URLS ON SCOMP LINK:
 I'm getting pretty good at this  (thumbnail)
-boba fett in slave i (thumbnail)

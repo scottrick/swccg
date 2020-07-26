@@ -1,4 +1,5 @@
-Fix typos in JSON data.
+Rotate land locations 90 degrees in small thumbnails
+When comparing card face titles, ignore *** so unique cards are properly sorted
 Fix location gametext search not having DS.
 
 ---------------------------------------------------------

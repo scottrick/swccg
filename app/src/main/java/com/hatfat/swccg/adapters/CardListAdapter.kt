@@ -10,16 +10,18 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.hatfat.swccg.R
 import com.hatfat.swccg.data.SWCCGCard
+import com.hatfat.swccg.data.SWCCGCardIdList
 import com.hatfat.swccg.data.SWCCGConfig
-import java.util.*
+import com.hatfat.swccg.repo.CardRepository
 
 class CardListAdapter(
     val context: Context,
     val config: SWCCGConfig,
-    val cardSelectedInterface: CardSelectedInterface
+    val cardSelectedInterface: CardSelectedInterface,
+    val cardRepository: CardRepository
 ) : RecyclerView.Adapter<CardListAdapter.ViewHolder>() {
 
-    var cardList: ArrayList<SWCCGCard> = ArrayList()
+    var cardIdList = SWCCGCardIdList(emptyList())
         set(value) {
             field = value
             notifyDataSetChanged()
@@ -66,11 +68,13 @@ class CardListAdapter(
     }
 
     override fun getItemCount(): Int {
-        return cardList.size
+        return cardIdList.cardIds.size
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        holder.bind(cardList[position])
+        cardRepository.cardsMap.value?.get(cardIdList.cardIds[position])?.let {
+            holder.bind(it)
+        }
     }
 
     interface CardSelectedInterface {

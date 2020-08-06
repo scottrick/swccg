@@ -42,8 +42,8 @@
         android:name="com.hatfat.swccg.fragments.CardListFragment"
         android:label="CardListFragment" >
         <argument
-            android:name="cards"
-            app:argType="com.hatfat.swccg.data.SWCCGCardList" />
+            android:name="cardIdList"
+            app:argType="com.hatfat.swccg.data.SWCCGCardIdList" />
         <action
             android:id="@+id/action_cardListFragment_to_viewSingleCardFragment"
             app:destination="@id/viewSingleCardFragment" />
@@ -56,8 +56,8 @@
         android:name="com.hatfat.swccg.fragments.SwipeCardListFragment"
         android:label="SwipeCardListFragment" >
         <argument
-            android:name="cardList"
-            app:argType="com.hatfat.swccg.data.SWCCGCardList" />
+            android:name="cardIdList"
+            app:argType="com.hatfat.swccg.data.SWCCGCardIdList" />
         <argument
             android:name="selectedIndex"
             app:argType="integer" />

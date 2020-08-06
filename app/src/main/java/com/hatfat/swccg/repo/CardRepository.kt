@@ -6,6 +6,7 @@ import androidx.lifecycle.MutableLiveData
 import com.google.gson.Gson
 import com.hatfat.swccg.R
 import com.hatfat.swccg.data.SWCCGCard
+import com.hatfat.swccg.data.SWCCGCardIdList
 import com.hatfat.swccg.data.SWCCGCardList
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
@@ -22,13 +23,17 @@ class CardRepository @Inject constructor(
     private val gson: Gson
 ) : SWCCGRepository() {
     private val cardHashMapLiveData = MutableLiveData<Map<Int, SWCCGCard>>()
-    private val cardArrayListLiveData = MutableLiveData<Array<SWCCGCard>>()
+    private val sortedCardArrayLiveData = MutableLiveData<Array<SWCCGCard>>()
+    private val sortedCardIdsListLiveData = MutableLiveData<SWCCGCardIdList>()
 
     val cardsMap: LiveData<Map<Int, SWCCGCard>>
         get() = cardHashMapLiveData
 
-    val cardsArray: LiveData<Array<SWCCGCard>>
-        get() = cardArrayListLiveData
+    val sortedCardsArray: LiveData<Array<SWCCGCard>>
+        get() = sortedCardArrayLiveData
+
+    val sortedCardIds: LiveData<SWCCGCardIdList>
+        get() = sortedCardIdsListLiveData
 
     init {
         cardHashMapLiveData.value = HashMap()
@@ -63,7 +68,8 @@ class CardRepository @Inject constructor(
 
         withContext(Dispatchers.Main) {
             cardHashMapLiveData.value = hashMap
-            cardArrayListLiveData.value = array
+            sortedCardArrayLiveData.value = array
+            sortedCardIdsListLiveData.value = SWCCGCardIdList(array.mapNotNull { it.id })
             loadedLiveData.value = true
         }
     }

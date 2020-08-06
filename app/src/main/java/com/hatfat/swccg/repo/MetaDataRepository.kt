@@ -37,7 +37,7 @@ class MetaDataRepository @Inject constructor(
         sidesLiveData.value = HashSet()
         setsLiveData.value = HashSet()
 
-        cardRepository.cardsArray.observeForever {
+        cardRepository.sortedCardsArray.observeForever {
             it?.let {
                 GlobalScope.launch(Dispatchers.IO) {
                     load(it)

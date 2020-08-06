@@ -4,6 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.hatfat.swccg.data.SWCCGCard
+import com.hatfat.swccg.data.SWCCGCardIdList
 import com.hatfat.swccg.repo.CardRepository
 import javax.inject.Inject
 
@@ -24,6 +25,6 @@ class MasterCardListViewModel @Inject constructor(
         navigateToSingleCardLiveData.value = card
     }
 
-    val cards: LiveData<Array<SWCCGCard>>
-        get() = cardRepository.cardsArray
+    val cardIds: LiveData<SWCCGCardIdList>
+        get() = cardRepository.sortedCardIds
 }

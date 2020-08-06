@@ -17,6 +17,7 @@ import com.hatfat.swccg.app.InjectionGraph
 import com.hatfat.swccg.app.SWCCGApplication
 import com.hatfat.swccg.data.SWCCGCard
 import com.hatfat.swccg.data.SWCCGConfig
+import com.hatfat.swccg.repo.CardRepository
 import com.hatfat.swccg.viewmodels.MasterCardListViewModel
 import com.hatfat.swccg.viewmodels.SWCCGViewModelFactory
 import javax.inject.Inject
@@ -32,13 +33,15 @@ class MasterCardListFragment : Fragment() {
     @Inject
     lateinit var swccgViewModelFactory: SWCCGViewModelFactory
 
+    @Inject
+    lateinit var cardRepository: CardRepository
+
     private lateinit var viewModel: MasterCardListViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        viewModel =
-            ViewModelProvider(this, swccgViewModelFactory)[MasterCardListViewModel::class.java]
+        viewModel = ViewModelProvider(this, swccgViewModelFactory)[MasterCardListViewModel::class.java]
         viewModel.navigateToSingleCard.observe(this, Observer {
             it?.let {
                 findNavController().navigate(
@@ -65,15 +68,17 @@ class MasterCardListFragment : Fragment() {
                     override fun onCardSelected(card: SWCCGCard) {
                         viewModel.navigateTo(card)
                     }
-                })
+                },
+                cardRepository
+            )
 
         view?.findViewById<RecyclerView>(R.id.card_recyclerview)?.apply {
             this.layoutManager = LinearLayoutManager(this.context)
             this.adapter = cardListAdapter
         }
 
-        viewModel.cards.observe(viewLifecycleOwner, Observer {
-            cardListAdapter.cardList = ArrayList(it.toList())
+        viewModel.cardIds.observe(viewLifecycleOwner, Observer {
+            cardListAdapter.cardIdList = it
         })
 
         return view

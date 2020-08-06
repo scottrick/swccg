@@ -22,6 +22,7 @@ import com.hatfat.swccg.adapters.FullCardListAdapter
 import com.hatfat.swccg.app.InjectionGraph
 import com.hatfat.swccg.app.SWCCGApplication
 import com.hatfat.swccg.data.SWCCGConfig
+import com.hatfat.swccg.repo.CardRepository
 import com.hatfat.swccg.repo.MetaDataRepository
 import com.hatfat.swccg.viewmodels.SWCCGViewModelFactory
 import com.hatfat.swccg.viewmodels.SwipeCardListViewModel
@@ -41,6 +42,9 @@ class SwipeCardListFragment : Fragment() {
     @Inject
     lateinit var metaDataRepository: MetaDataRepository
 
+    @Inject
+    lateinit var cardRepository: CardRepository
+
     private lateinit var viewModel: SwipeCardListViewModel
 
     private lateinit var topRecyclerView: RecyclerView
@@ -49,14 +53,11 @@ class SwipeCardListFragment : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        viewModel = ViewModelProvider(this)[SwipeCardListViewModel::class.java]
-
         val args = navArgs<SwipeCardListFragmentArgs>().value
-        viewModel.setCardList(args.cardList.cards)
-        viewModel.setCurrentCardIndex(args.selectedIndex)
 
-        viewModel =
-            ViewModelProvider(this, swccgViewModelFactory)[SwipeCardListViewModel::class.java]
+        viewModel = ViewModelProvider(this, swccgViewModelFactory)[SwipeCardListViewModel::class.java]
+        viewModel.setCardIdList(args.cardIdList)
+        viewModel.setCurrentCardIndex(args.selectedIndex)
     }
 
     override fun onCreateView(
@@ -78,7 +79,8 @@ class SwipeCardListFragment : Fragment() {
                     override fun onIndexSelected(index: Int) {
                         indexSelected(index)
                     }
-                }
+                },
+                cardRepository
             )
 
         val bigCardListAdapter =
@@ -91,7 +93,8 @@ class SwipeCardListFragment : Fragment() {
                     override fun onIndexSelected(index: Int) {
                         indexSelected(index)
                     }
-                }
+                },
+                cardRepository
             )
 
         view?.findViewById<RecyclerView>(R.id.top_recycler_view)?.apply {
@@ -121,9 +124,9 @@ class SwipeCardListFragment : Fragment() {
             })
         }
 
-        viewModel.cardList.observe(viewLifecycleOwner, Observer {
-            smallCardListAdapter.cardList = ArrayList(it.toList())
-            bigCardListAdapter.cardList = ArrayList(it.toList())
+        viewModel.cardIdList.observe(viewLifecycleOwner, Observer {
+            smallCardListAdapter.cardIdList = it
+            bigCardListAdapter.cardIdList = it
         })
 
         viewModel.currentCardIndex.value?.let {

@@ -4,14 +4,18 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Transformations
 import androidx.lifecycle.ViewModel
-import com.hatfat.swccg.data.SWCCGCard
+import com.hatfat.swccg.data.SWCCGCardIdList
+import com.hatfat.swccg.repo.CardRepository
+import javax.inject.Inject
 
-class SwipeCardListViewModel : ViewModel()
+class SwipeCardListViewModel @Inject constructor(
+    val cardRepository: CardRepository
+) : ViewModel()
 {
     private val isFlippedLiveData = MutableLiveData<Boolean>()
     private val isRotatedLiveData = MutableLiveData<Boolean>()
 
-    private val cardListLiveData = MutableLiveData<List<SWCCGCard>>()
+    private val cardIdListLiveData = MutableLiveData<SWCCGCardIdList>()
     private val currentCardIndexLiveData = MutableLiveData<Int>()
 
     val isFlipped: LiveData<Boolean>
@@ -20,15 +24,15 @@ class SwipeCardListViewModel : ViewModel()
     val isRotated: LiveData<Boolean>
         get() = isRotatedLiveData
 
-    val cardList: LiveData<List<SWCCGCard>>
-        get() = cardListLiveData
+    val cardIdList: LiveData<SWCCGCardIdList>
+        get() = cardIdListLiveData
 
     val isFlippable: LiveData<Boolean> = Transformations.map(currentCardIndexLiveData) {
-        cardList.value?.get(it)?.isFlippable
+        cardRepository.cardsMap.value?.get(cardIdList.value?.cardIds?.get(it))?.isFlippable
     }
 
-    fun setCardList(cardList: List<SWCCGCard>) {
-        cardListLiveData.value = cardList
+    fun setCardIdList(cardIdList: SWCCGCardIdList) {
+        cardIdListLiveData.value = cardIdList
     }
 
     val currentCardIndex: LiveData<Int>

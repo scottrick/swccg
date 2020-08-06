@@ -21,7 +21,6 @@ import androidx.navigation.fragment.findNavController
 import com.hatfat.swccg.R
 import com.hatfat.swccg.app.InjectionGraph
 import com.hatfat.swccg.app.SWCCGApplication
-import com.hatfat.swccg.data.SWCCGCardList
 import com.hatfat.swccg.data.SWCCGFormat
 import com.hatfat.swccg.util.hideKeyboard
 import com.hatfat.swccg.viewmodels.SWCCGViewModelFactory
@@ -46,8 +45,7 @@ class SearchFragment : Fragment(), AdapterView.OnItemSelectedListener {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        viewModel =
-            ViewModelProvider(this, swccgViewModelFactory)[SearchViewModel::class.java]
+        viewModel = ViewModelProvider(this, swccgViewModelFactory)[SearchViewModel::class.java]
     }
 
     override fun onCreateView(
@@ -252,7 +250,7 @@ class SearchFragment : Fragment(), AdapterView.OnItemSelectedListener {
 
         viewModel.searchResults.observe(viewLifecycleOwner, Observer {
             it?.let {
-                if (it.isEmpty()) {
+                if (it.cardIds.isEmpty()) {
                     Toast.makeText(
                         this.context,
                         R.string.search_no_results_toast,
@@ -261,7 +259,7 @@ class SearchFragment : Fragment(), AdapterView.OnItemSelectedListener {
                 } else {
                     findNavController().navigate(
                         SearchFragmentDirections.actionSearchFragmentToCardListFragment(
-                            SWCCGCardList((it))
+                            it
                         )
                     )
                 }

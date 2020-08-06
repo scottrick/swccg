@@ -17,8 +17,8 @@ import com.hatfat.swccg.adapters.CardListAdapter
 import com.hatfat.swccg.app.InjectionGraph
 import com.hatfat.swccg.app.SWCCGApplication
 import com.hatfat.swccg.data.SWCCGCard
-import com.hatfat.swccg.data.SWCCGCardList
 import com.hatfat.swccg.data.SWCCGConfig
+import com.hatfat.swccg.repo.CardRepository
 import com.hatfat.swccg.repo.MetaDataRepository
 import com.hatfat.swccg.viewmodels.CardListViewModel
 import com.hatfat.swccg.viewmodels.SWCCGViewModelFactory
@@ -38,24 +38,24 @@ class CardListFragment : Fragment() {
     @Inject
     lateinit var metaDataRepository: MetaDataRepository
 
+    @Inject
+    lateinit var cardRepository: CardRepository
+
     private lateinit var viewModel: CardListViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        viewModel = ViewModelProvider(this)[CardListViewModel::class.java]
-
         val args = navArgs<CardListFragmentArgs>().value
-        viewModel.setCardList(args.cards.cards)
 
-        viewModel =
-            ViewModelProvider(this, swccgViewModelFactory)[CardListViewModel::class.java]
+        viewModel = ViewModelProvider(this, swccgViewModelFactory)[CardListViewModel::class.java]
+        viewModel.setCardIdList(args.cardIdList)
         viewModel.navigateToSingleCard.observe(this, Observer {
             it?.let { card ->
-                viewModel.cardList.value?.let {
+                viewModel.cardIdList.value?.let {
                     findNavController().navigate(
                         CardListFragmentDirections.actionCardListFragmentToSwipeCardListFragment(
-                            SWCCGCardList(it), args.cards.cards.indexOf(card)
+                            it, args.cardIdList.cardIds.indexOf(card.id)
                         )
                     )
                     viewModel.doneNavigating()
@@ -78,15 +78,17 @@ class CardListFragment : Fragment() {
                     override fun onCardSelected(card: SWCCGCard) {
                         viewModel.navigateTo(card)
                     }
-                })
+                },
+                cardRepository
+            )
 
         view?.findViewById<RecyclerView>(R.id.card_recyclerview)?.apply {
             this.layoutManager = LinearLayoutManager(this.context)
             this.adapter = cardListAdapter
         }
 
-        viewModel.cardList.observe(viewLifecycleOwner, Observer {
-            cardListAdapter.cardList = ArrayList(it.toList())
+        viewModel.cardIdList.observe(viewLifecycleOwner, Observer {
+            cardListAdapter.cardIdList = it
         })
 
         return view

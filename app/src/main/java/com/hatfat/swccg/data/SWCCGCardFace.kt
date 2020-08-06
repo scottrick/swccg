@@ -22,6 +22,7 @@ data class SWCCGCardFace(
     /* default constructor that gson will call.  otherwise the lazy property will not work */
     constructor() : this(null, null, null, null, null, null, null, null, null, null,null, null, null, null)
 
+    @delegate:Transient
     val sortableTitle: String by lazy {
         var result = title ?: ""
 

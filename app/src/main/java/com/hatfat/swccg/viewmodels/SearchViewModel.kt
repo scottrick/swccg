@@ -5,6 +5,7 @@ import androidx.lifecycle.*
 import androidx.lifecycle.Observer
 import com.hatfat.swccg.R
 import com.hatfat.swccg.data.SWCCGCard
+import com.hatfat.swccg.data.SWCCGCardIdList
 import com.hatfat.swccg.data.SWCCGFormat
 import com.hatfat.swccg.filter.*
 import com.hatfat.swccg.repo.CardRepository
@@ -50,7 +51,7 @@ class SearchViewModel @Inject constructor(
         this.addSource(searchGametextLiveData, observer)
         this.addSource(searchLoreLiveData, observer)
     }
-    private val searchResultsLiveData = MutableLiveData<List<SWCCGCard>>()
+    private val searchResultsLiveData = MutableLiveData<SWCCGCardIdList>()
     private val selectedSetLiveData = MutableLiveData<String>()
     private val selectedSideLiveData = MutableLiveData<String>()
     private val selectedCardTypeLiveData = MutableLiveData<String>()
@@ -72,7 +73,7 @@ class SearchViewModel @Inject constructor(
     val searchLore: LiveData<Boolean>
         get() = searchLoreLiveData
 
-    val searchResults: LiveData<List<SWCCGCard>>
+    val searchResults: LiveData<SWCCGCardIdList>
         get() = searchResultsLiveData
 
     val sets: LiveData<List<String>> = Transformations.map(metaDataRepository.sets) {
@@ -272,14 +273,21 @@ class SearchViewModel @Inject constructor(
             }
         }
 
-        var results = cardRepository.cardsArray.value?.toList()
+        var results = cardRepository.sortedCardIds.value?.cardIds?.toList()
 
         for (filter in filters) {
-            results = results?.filter { filter.filter(it) }
+            results = results?.filter {
+                cardRepository.cardsMap.value?.get(it)?.let {
+                    filter.filter(it)
+                } ?: false
+            }
         }
 
         withContext(Dispatchers.Main) {
-            searchResultsLiveData.value = results
+            results?.let {
+                searchResultsLiveData.value = SWCCGCardIdList(it)
+            }
+
             stateLiveData.value = State.ENTERING_INFO
         }
     }

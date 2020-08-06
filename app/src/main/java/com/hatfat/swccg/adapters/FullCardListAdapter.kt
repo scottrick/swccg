@@ -11,17 +11,19 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.hatfat.swccg.R
 import com.hatfat.swccg.data.SWCCGCard
+import com.hatfat.swccg.data.SWCCGCardIdList
 import com.hatfat.swccg.data.SWCCGConfig
-import java.util.*
+import com.hatfat.swccg.repo.CardRepository
 
 class FullCardListAdapter(val context: Context,
                           val config: SWCCGConfig,
                           val isFullscreen: Boolean,
                           val isLandscape: Boolean,
-                          val indexSelectedInterface: IndexSelectedInterface
+                          val indexSelectedInterface: IndexSelectedInterface,
+                          val cardRepository: CardRepository
 ) : RecyclerView.Adapter<FullCardListAdapter.ViewHolder>() {
 
-    var cardList: ArrayList<SWCCGCard> = ArrayList()
+    var cardIdList = SWCCGCardIdList(emptyList())
         set(value) {
             field = value
             notifyDataSetChanged()
@@ -62,11 +64,13 @@ class FullCardListAdapter(val context: Context,
     }
 
     override fun getItemCount(): Int {
-        return cardList.size
+        return cardIdList.cardIds.size
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        holder.bind(cardList[position])
+        cardRepository.cardsMap.value?.get(cardIdList.cardIds[position])?.let {
+            holder.bind(position, it)
+        }
     }
 
     inner class ViewHolder(
@@ -75,7 +79,7 @@ class FullCardListAdapter(val context: Context,
 
         val imageView: ImageView = view.findViewById(R.id.view_full_card_imageview)
 
-        fun bind(card: SWCCGCard) {
+        fun bind(position: Int, card: SWCCGCard) {
             /* clear old image view */
             imageView.setImageResource(0)
             imageView.rotation = if (rotated) 180.0f else 0.0f
@@ -93,7 +97,7 @@ class FullCardListAdapter(val context: Context,
             imageRequest.into(imageView)
 
             view.setOnClickListener {
-                indexSelectedInterface.onIndexSelected(cardList.indexOf(card))
+                indexSelectedInterface.onIndexSelected(position)
             }
         }
     }

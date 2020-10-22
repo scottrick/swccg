@@ -24,4 +24,4 @@
 -dontoptimize
 -dontobfuscate
 
--keep class com.hatfat.swccg.data.*
+-keep class com.hatfat.cards.data.*

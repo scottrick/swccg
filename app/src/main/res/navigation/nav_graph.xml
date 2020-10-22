@@ -7,28 +7,16 @@
     app:startDestination="@id/searchFragment">
 
     <fragment
-        android:id="@+id/masterCardListFragment"
-        android:name="com.hatfat.swccg.fragments.MasterCardListFragment"
-        android:label="MasterCardListFragment" >
-        <action
-            android:id="@+id/action_masterCardListFragment_to_viewSingleCardFragment"
-            app:destination="@id/viewSingleCardFragment"
-            app:enterAnim="@anim/fragment_fade_enter"
-            app:exitAnim="@anim/fragment_fade_exit"
-            app:popEnterAnim="@anim/fragment_fade_enter"
-            app:popExitAnim="@anim/fragment_fade_exit" />
-    </fragment>
-    <fragment
         android:id="@+id/viewSingleCardFragment"
-        android:name="com.hatfat.swccg.fragments.SingleCardFragment"
+        android:name="com.hatfat.cards.fragments.SingleCardFragment"
         android:label="ViewSingleCardFragment" >
         <argument
             android:name="card"
-            app:argType="com.hatfat.swccg.data.SWCCGCard" />
+            app:argType="com.hatfat.cards.data.SWCCGCard" />
     </fragment>
     <fragment
         android:id="@+id/searchFragment"
-        android:name="com.hatfat.swccg.fragments.SearchFragment"
+        android:name="com.hatfat.cards.fragments.SearchFragment"
         android:label="SearchFragment" >
         <action
             android:id="@+id/action_searchFragment_to_cardListFragment"
@@ -39,11 +27,11 @@
     </fragment>
     <fragment
         android:id="@+id/cardListFragment"
-        android:name="com.hatfat.swccg.fragments.CardListFragment"
+        android:name="com.hatfat.cards.fragments.CardListFragment"
         android:label="CardListFragment" >
         <argument
             android:name="cardIdList"
-            app:argType="com.hatfat.swccg.data.SWCCGCardIdList" />
+            app:argType="com.hatfat.cards.data.SWCCGCardIdList" />
         <action
             android:id="@+id/action_cardListFragment_to_viewSingleCardFragment"
             app:destination="@id/viewSingleCardFragment" />
@@ -53,11 +41,11 @@
     </fragment>
     <fragment
         android:id="@+id/swipeCardListFragment"
-        android:name="com.hatfat.swccg.fragments.SwipeCardListFragment"
+        android:name="com.hatfat.cards.fragments.SwipeCardListFragment"
         android:label="SwipeCardListFragment" >
         <argument
             android:name="cardIdList"
-            app:argType="com.hatfat.swccg.data.SWCCGCardIdList" />
+            app:argType="com.hatfat.cards.data.SWCCGCardIdList" />
         <argument
             android:name="selectedIndex"
             app:argType="integer" />

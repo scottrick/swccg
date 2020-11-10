@@ -9,9 +9,9 @@
         android:name="com.hatfat.cards.app.CardsApplication"
         android:usesCleartextTraffic="true"
         android:allowBackup="true"
-        android:icon="@mipmap/playstore"
+        android:icon="@mipmap/comlink"
         android:label="@string/app_name"
-        android:roundIcon="@mipmap/playstore_round"
+        android:roundIcon="@mipmap/comlink_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
 

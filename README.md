@@ -1,4 +1,4 @@
 # swccg
-Android SWCCG App
+[DEPRECATED] Android SWCCG App
 
-Check the Cards repo for an updated version.
+This repo is no longer in use.  The Comlink app has moved to https://github.com/scottrick/cards.
